@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Sign Up</title>
+	</head>
+	<body>
+
+		<h2>Sign Up</h2>
+		<form method="post" action="" name="signup-form">
+
+			<label>Username</label>
+			<input type="text" name="username" pattern="[a-zA-Z0-9]+" required/>
+
+            <label>Email</label>
+			<input type="text" name="email" required/>
+
+			<label>Password</label>
+			<input type="password" name="password" required/>
+
+			<button type="submit" name="register" value="register">Create account</button>
+		</form>
+<div> {{message}}</div>
+	</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>List of users</title>
+	</head>
+	<body>
+
+		<table>
+			<tbody>
+
+				{% for user in users %}
+					<tr>
+						<td>{{ user.user_id }}</td>
+                        <td>{{ user.login }}</td>
+                        <td>{{ user.email }}</td>
+                    	
+					</tr>
+				{% endfor %}
+
+			</tbody>
+		</table>
+
+	</body>
+</html>
