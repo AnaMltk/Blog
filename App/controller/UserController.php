@@ -3,7 +3,9 @@
 namespace App\controller;
 
 use \App\model\UserManager;
+use \App\model\GetPostHelper;
 use \App\model\UserModel;
+
 
 class UserController extends AppController
 {
@@ -11,29 +13,23 @@ class UserController extends AppController
     public function add()
     {
         $user = new UserManager();
-        
-
+        $helper = new GetPostHelper();
+        $userModel = new UserModel();
         $message = '';
-        $login = '';
-        $email = '';
-        $password = '';
-        if (isset($_POST['register'])) {
 
-            $login = $_POST['username'];
-            $email = $_POST['email'];
-            $password = $_POST['password'];
-            $userModel = $user->hydrate($login, $email, $password);
-        var_dump($userModel); 
+
+        if (null !== ($helper->getPost('register'))) {
+
+            $userModel = new UserModel($_POST);
+
             $message = $user->add($userModel);
+        } else {
+            echo 'please enter all information';
         }
-        
-        
+
+
+
         //redirect user on homepage
-
-
-        /*  $login = 'secondUser';
-        $password = 'jhdkjshkjhf';
-        $email = 'test2@gmail.com';*/
 
         $this->view->display('user/registration.html.twig', ['message' => $message, 'user' => $user]);
     }
@@ -57,17 +53,23 @@ class UserController extends AppController
     public function logIn()
     {
         $user = new UserManager();
-
-        $password = 'fdqjhkjshdjg';
-        $email = 'test@gmail.com';
-
-        $credentials = $user->getCredentials($email);
+        $helper = new GetPostHelper();
         $error = '';
-        if (in_array($password, $credentials)) {
-            echo 'You have logged in successfully';
-        } else {
-            $error = 'wrong password';
+        $userData = $helper->getUserCredentials();
+        var_dump($userData);
+
+        if (!empty($userData)) {
+            $login = $userData['login'];
+            $password = $userData['password'];
         }
+
+        if ($user->logIn($login, $password)) {
+            header('Location: /?action=user/listUsers');
+            exit;
+        }
+        $error = 'wrong password';
+
+
         $this->view->display('user/login.html.twig', ['error' => $error]);
     }
 
@@ -80,12 +82,6 @@ class UserController extends AppController
         $userModel = new UserManager();
         $users = $userModel->listUsers();
         $this->view->display('user/userslist.html.twig', ['users' => $users]);
-        /*foreach ($users as $user) {
-            $userId = $user['user_id'];
-            $login = $user['login'];
-            $email = $user['email'];
-            $role = $user['role'];
-           
-        }*/
+       
     }
 }

@@ -6,7 +6,16 @@ $action = explode('/', $page);
 $controller = '\\App\\controller\\'.$action[0].'Controller';
 $ctrl = new $controller;
 $method = $action[1];
-$ctrl->$method();
+if(method_exists($ctrl, $method)){
+    $ctrl->$method();
+} else {
+    echo 'method doesn\'t exist';
+    $method = 'add';
+    $ctrl->$method();
+}
+   
+
+
 
 //$user = new \App\controller\UserController();
 //$user->add();

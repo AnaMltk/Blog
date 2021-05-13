@@ -2,23 +2,17 @@
 
 namespace App\model;
 
+use App\controller\Hydrator;
 
-class UserModel
+class UserModel extends Model
 {
 
-  private $userId;
-  private $userName;
-  private $userEmail;
-  private $userPassword;
-  private const ROLE = 1;
 
-  /*public function hydrate($login, $email, $password)
-    {
-        $this->setUserName($login);
-        $this->setUserEmail($email);
-        $this->setUserPassword($password);
-        
-    }*/
+  protected $userId;
+  protected $userName;
+  protected $userEmail;
+  protected $userPassword;
+  protected const ROLE = 1;
 
   public function getUserId()
   {
