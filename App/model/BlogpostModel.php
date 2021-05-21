@@ -7,32 +7,32 @@ class BlogpostModel extends Model
 {
 
 
-    protected $userId;
-    protected $postId;
-    protected $creationDate;
-    protected $modificationDate;
+    protected $user_id;
+    protected $post_id;
+    protected $creation_date;
+    protected $modification_date;
     protected $title;
     protected $content;
     protected $headline;
 
     public function getUserId()
     {
-        return $this->userId;
+        return $this->user_id;
     }
 
     public function getPostID()
     {
-        return $this->postId;
+        return $this->post_id;
     }
 
     public function getCreationDate()
     {
-        return $this->creationDate;
+        return $this->creation_date;
     }
 
     public function getModificationDate()
     {
-        return $this->modificationDate;
+        return $this->modification_date;
     }
 
     public function getTitle()
@@ -50,16 +50,19 @@ class BlogpostModel extends Model
         return $this->content;
     }
 
-
-    public function setCreationDate($creationDate)
+    public function setUserId($user_id)
     {
-
-        $this->creationDate = $creationDate;
+        $this->user_id = $user_id;
     }
-    public function setModificationDate($modificationDate)
+    public function setCreationDate($creation_date)
     {
 
-        $this->modificationDate = $modificationDate;
+        $this->creation_date = $creation_date;
+    }
+    public function setModificationDate($modification_date)
+    {
+
+        $this->modification_date = $modification_date;
     }
     public function setTitle($title)
     {
