@@ -92,6 +92,6 @@ class UserManager extends Manager
             $user = $this->getDb()->prepare('UPDATE user SET password = :password WHERE user_id = :user_id');
             $user->execute([':password' => $hash, ':user_id' => $credentials['user_id']]);
         }
-        return true;
+        return $credentials['user_id'];
     }
 }

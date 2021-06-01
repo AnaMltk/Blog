@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<title>Sign Up</title>
-	</head>
-	<body>
+{% extends 'base.html.twig' %}
+{% block body %}
 
 		<h2>Sign Up</h2>
 		<form method="post" action="" name="signup-form">
@@ -21,5 +16,5 @@
 			<button type="submit" name="register" value="register">Create account</button>
 		</form>
 <div> {{message}}</div>
-	</body>
-</html>
+	
+{% endblock %}

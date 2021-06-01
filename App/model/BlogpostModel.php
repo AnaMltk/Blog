@@ -20,7 +20,7 @@ class BlogpostModel extends Model
         return $this->user_id;
     }
 
-    public function getPostID()
+    public function getPostId()
     {
         return $this->post_id;
     }
@@ -53,6 +53,11 @@ class BlogpostModel extends Model
     public function setUserId($user_id)
     {
         $this->user_id = $user_id;
+    }
+
+    public function setPostId($post_id)
+    {
+        $this->post_id = $post_id;
     }
     public function setCreationDate($creation_date)
     {

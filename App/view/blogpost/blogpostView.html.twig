@@ -21,5 +21,26 @@
 			</tbody>
 		</table>
 
+		<h2>Update a Blogpost</h2>
+		<form method="post" action="" name="blogpost-update-form">
+			<input type="text" name="user_id" value="{{blogpost.user_id}}"/>
+			<input type="text" name="post_id" value="{{blogpost.post_id}}"/>
+			<label>Title</label>
+			<input type="text" name="title" value="{{blogpost.title}}"/>
+
+			<label>Content</label>
+			<input type="text" name="content" value="{{blogpost.content}}" required/>
+
+			<label>Headline</label>
+			<input type="text" name="headline" value="{{blogpost.headline}}" required/>
+
+
+			<button type="submit" name="updateBlogpost" value="updateBlogpost">Update blogpost</button>
+		</form>
+
+		<form method="post" action="" name="blogpost-delete">
+		<button type="submit" name="deleteBlogpost" value="deleteBlogpost">Delete blogpost</button>
+		</form>
+
 	</body>
 </html>

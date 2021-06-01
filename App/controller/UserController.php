@@ -6,7 +6,6 @@ use \App\model\UserManager;
 use \App\model\GetPostHelper;
 use \App\model\UserModel;
 
-
 class UserController extends AppController
 {
 
@@ -47,7 +46,6 @@ class UserController extends AppController
         $userId = 2;
         $userModel = new UserManager();
         $user = $userModel->getUser($userId);
-        var_dump($user);
     }
 
     public function logIn()
@@ -56,14 +54,16 @@ class UserController extends AppController
         $helper = new GetPostHelper();
         $error = '';
         $userData = $helper->getUserCredentials();
-        var_dump($userData);
 
         if (!empty($userData)) {
             $login = $userData['login'];
             $password = $userData['password'];
         }
 
-        if ($user->logIn($login, $password)) {
+        if ($user_id = $user->logIn($login, $password)) {
+            
+            $_SESSION['userName'] = $login;
+            $_SESSION['userId'] = $user_id;
             header('Location: /?action=user/listUsers');
             exit;
         }
@@ -81,6 +81,7 @@ class UserController extends AppController
     {
         $userModel = new UserManager();
         $users = $userModel->listUsers();
+        var_dump($_SESSION['userId']);
         $this->view->display('user/userslist.html.twig', ['users' => $users]);
        
     }
