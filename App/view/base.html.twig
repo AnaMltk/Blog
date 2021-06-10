@@ -12,10 +12,15 @@
 	<body>
 		<div class="topnav">
 			<a class="active" href="/?action=user/add">Register</a>
-			<a href="/?action=user/login">Login</a>
-			<a href="/?action=blogpost/add">Write Blogpost</a>
-			<a href="/?action=blogpost/listPosts">Blogpost List</a>
+			<a href="/user/login">Login</a>
+			<a href="/blogpost/add">Write Blogpost</a>
+			<a href="/blogpost/listposts">Blogpost List</a>
 		</div>
+		<h2>Logout</h2>
+		<form action="/user/logout" method="post">
+
+			<button type="submit" name="logout" value="logout">Log out</button>
+		</form>
 		{% block body %}{% endblock %}
 	</body>
 

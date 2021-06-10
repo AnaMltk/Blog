@@ -41,11 +41,12 @@ class UserController extends AppController
         $user = $userModel->modifyPassword($password, $userId);
     }
 
-    public function getUser()
+    public function getUser($userId)
     {
-        $userId = 2;
+        //$userId = 2;
         $userModel = new UserManager();
-        $user = $userModel->getUser($userId);
+        
+        return $userModel->getUser($userId);
     }
 
     public function logIn()
@@ -62,8 +63,8 @@ class UserController extends AppController
 
         if ($user_id = $user->logIn($login, $password)) {
             
-            $_SESSION['userName'] = $login;
-            $_SESSION['userId'] = $user_id;
+            $_SESSION['user'] = $this->getUser($user_id);
+        
             header('Location: /?action=user/listUsers');
             exit;
         }
@@ -75,14 +76,19 @@ class UserController extends AppController
 
     public function logOut()
     {
+        $helper = new GetPostHelper();
+        if (null !== ($helper->getPost('logout'))) {
+            $_SESSION = array();
+        }
+        var_dump($_SESSION);
+        header('Location: /user/listUsers');
     }
 
     public function listUsers()
     {
         $userModel = new UserManager();
         $users = $userModel->listUsers();
-        var_dump($_SESSION['userId']);
+        var_dump($_SESSION);
         $this->view->display('user/userslist.html.twig', ['users' => $users]);
-       
     }
 }

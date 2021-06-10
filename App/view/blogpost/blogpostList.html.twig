@@ -5,7 +5,7 @@
 
 				{% for blogpost in blogposts %}
 					<tr>
-						<td><a href = '?action=blogpost/getPost/{{ blogpost.post_id }}'>{{ blogpost.post_id }}</a></td> 
+						<td><a href = '/blogpost/getPost/{{ blogpost.post_id }}'>{{ blogpost.post_id }}</a></td> 
                         <td>{{ blogpost.title }}</td>
                         <td>{{ blogpost.content }}</td>
                     	

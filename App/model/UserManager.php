@@ -49,7 +49,7 @@ class UserManager extends Manager
 
     public function getUser($userId)
     {
-        $statement = $this->getDb()->prepare('SELECT login, email, role FROM user WHERE user_id = ?');
+        $statement = $this->getDb()->prepare('SELECT user_id, login, email, role FROM user WHERE user_id = ?');
         $statement->execute(array($userId));
         $user = $statement->fetch(\PDO::FETCH_ASSOC);
         return $user;

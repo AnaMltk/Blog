@@ -9,20 +9,20 @@
 		<table>
 			<tbody>
 
-				
-					<tr>
-						<td>{{ blogpost.post_id }}</td> 
-                        <td>{{ blogpost.title }}</td>
-                        <td>{{ blogpost.content }}</td>
-                    	
-					</tr>
-			
+
+				<tr>
+					<td>{{ blogpost.post_id }}</td>
+					<td>{{ blogpost.title }}</td>
+					<td>{{ blogpost.content }}</td>
+
+				</tr>
+
 
 			</tbody>
 		</table>
 
 		<h2>Update a Blogpost</h2>
-		<form method="post" action="" name="blogpost-update-form">
+		<form method="post" action="/?action=blogpost/modify/{{blogpost.post_id}}" name="blogpost-update-form">
 			<input type="text" name="user_id" value="{{blogpost.user_id}}"/>
 			<input type="text" name="post_id" value="{{blogpost.post_id}}"/>
 			<label>Title</label>
@@ -38,9 +38,33 @@
 			<button type="submit" name="updateBlogpost" value="updateBlogpost">Update blogpost</button>
 		</form>
 
-		<form method="post" action="" name="blogpost-delete">
-		<button type="submit" name="deleteBlogpost" value="deleteBlogpost">Delete blogpost</button>
+		<form method="post" action="/?action=blogpost/delete/{{blogpost.post_id}}" name="blogpost-delete">
+			<button type="submit" name="deleteBlogpost" value="deleteBlogpost">Delete blogpost</button>
 		</form>
 
+		<h2>Write a comment</h2>
+		
+		<form method="post" action="/comment/add" name="comment-creation-form">
+			<input type="hidden" name="user_id" value="{{user.user_id}}"/>
+			<input type="hidden" name="post_id" value="{{blogpost.post_id}}"/>
+
+			<label>Content</label>
+			<input type="text" name="content" required/>
+
+			<button type="submit" name="createComment" value="createComment">Create comment</button>
+		</form>
+		{% for comment in comments %}
+		<table>
+			<tbody>
+				<tr>
+					<td>{{ comment.post_id }}</td>
+					<td>{{ comment.content }}</td>
+
+
+				</tr>
+			</tbody>
+		</table>
+		{% endfor %}
+		<div></body>
 	</body>
 </html>
