@@ -10,7 +10,6 @@ trait Hydrator
             $key = str_replace('_', '', $key);
             $method = 'set'.ucfirst($key);
             
-            echo $method.'<br>';
             if(method_exists($this, $method)){
                 $this->$method($value);
             }

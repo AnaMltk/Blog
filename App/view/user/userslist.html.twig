@@ -6,7 +6,7 @@
 
 				{% for user in users %}
 					<tr>
-						<td><a href = '?action=user/view/{{ user.user_id }}'>{{ user.user_id }}</a></td> 
+						<td><a href = '/user/getUser/{{ user.user_id }}'>{{ user.user_id }}</a></td> 
                         <td>{{ user.login }}</td>
                         <td>{{ user.email }}</td>
                     	

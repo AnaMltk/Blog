@@ -22,8 +22,6 @@ class BlogpostManager extends Manager
 
     public function modify($blogpost)
     {
-        //var_dump($blogpost);
-        //exit;
         $statement = $this->getDb()->prepare('UPDATE blogpost SET title = :title, content = :content, headline = :headline WHERE post_id = :post_id');
         $statement->execute([
             ':title' => $blogpost->getTitle(),
@@ -53,9 +51,12 @@ class BlogpostManager extends Manager
         return $blogposts;
     }
 
-    public function delete($postId)
+    public function delete($blogpost)
     {
-        $statement = $this->getDb()->prepare('DELETE * FROM blogpost WHERE post_id = ?');
-        $statement->execute(array($postId));
+        $statement = $this->getDb()->prepare('DELETE FROM blogpost WHERE post_id = :post_id');
+        $statement->execute([
+            ':post_id' => $blogpost->getPostId(),
+        ]);
+        
     }
 }

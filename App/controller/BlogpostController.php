@@ -5,7 +5,8 @@ namespace App\controller;
 use \App\model\BlogpostManager;
 use \App\model\GetPostHelper;
 use \App\model\BlogpostModel;
-
+use App\model\CommentManager;
+use App\model\CommentModel;
 
 class BlogpostController extends AppController
 {
@@ -31,17 +32,38 @@ class BlogpostController extends AppController
     public function listPosts()
     {
         $blogpostManager = new BlogpostManager();
+       
         $blogposts = $blogpostManager->listPosts();
+        
         $this->view->display('blogpost/blogpostList.html.twig', ['blogposts' => $blogposts]);
     }
 
     public function getPost($post_id)
     {
         $blogpostManager = new BlogpostManager();
-        //$helper = new GetPostHelper();
-        //$message = '';
+        $commentManager = new CommentManager();
+       
+        $helper = new GetPostHelper();
+        $comments = $commentManager->listComments($post_id);
         $blogpost = $blogpostManager->getPost($post_id);
-        $this->view->display('blogpost/blogpostView.html.twig', ['blogpost' => $blogpost]);
+        
+        if (null !== ($helper->getPost('publish'))) {
+            $commentModel = new CommentModel($_POST);
+            $commentManager->publish($commentModel->getCommentId());
+            $comments = $commentManager->listComments($post_id);
+         }
+
+         if (null !== ($helper->getPost('delete'))) {
+            $commentModel = new CommentModel($_POST);
+            $commentManager->delete($commentModel->getCommentId());
+            $comments = $commentManager->listComments($post_id);
+         }
+         $message = '';
+         if(isset($_SESSION['message']) && !empty($_SESSION['message'])){
+           $message = $_SESSION['message'];
+           $_SESSION['message'] = '';
+         }
+        $this->view->display('blogpost/blogpostView.html.twig', ['blogpost' => $blogpost, 'comments' => $comments, 'user'=>$_SESSION['user'] ?? '', 'message'=>$message]);
         return $blogpost;
     }
 
@@ -51,16 +73,15 @@ class BlogpostController extends AppController
         $helper = new GetPostHelper();
         // $blogpost = new BlogpostManager();
         $blogpost = $blogpostManager->getPost($post_id);
-        //var_dump($blogpost);
+        var_dump($blogpost);
 
         // $message = '';
         if (null !== ($helper->getPost('updateBlogpost'))) {
-            //var_dump($_POST);
-            //exit;
+
             $blogpostModel = new BlogpostModel($_POST);
-            //var_dump($blogpostModel);
-            //exit;
+            var_dump($blogpostModel);
             $blogpost = $blogpostManager->modify($blogpostModel);
+            var_dump($blogpost);
         }
 
 
@@ -72,11 +93,17 @@ class BlogpostController extends AppController
         $blogpostManager = new BlogpostManager();
         $helper = new GetPostHelper();
         $blogpost = $blogpostManager->getPost($post_id);
-        $postId = 2;
+        var_dump($blogpost);
+        $message = '';
+        //$postId = 2;
         if (null !== ($helper->getPost('deleteBlogpost'))) {
-            //$blogpostModel = new BlogpostModel($_POST);
-            $blogpost->delete($postId);
+            $blogpostModel = new BlogpostModel($_POST);
+            var_dump($blogpostModel);
+            $message = $blogpostManager->delete($blogpostModel);
+            //$message = $blogpostManager->delete($blogpostModel);
+            // var_dump($message);
         }
-        $this->view->display('blogpost/blogpostView.html.twig', ['blogpost' => $blogpost]);
+        $this->view->display('blogpost/blogpostView.html.twig', ['message' => $message]);
+        //header('Location: /?action=blogpost/listPosts');
     }
 }

@@ -1,27 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<title>Write a Blogpost</title>
-	</head>
-	<body>
+{% extends 'base.html.twig' %}
+{% block body %}
 
-		<h2>Write a Blogpost</h2>
-		<form method="post" action="" name="blogpost-creation-form">
-			<input type="hidden" name="user_id" value="32"/>
-			<label>Title</label>
-			<input type="text" name="title"/>
+	<h2>Write a Blogpost</h2>
+	<form method="post" action="" name="blogpost-creation-form">
+		<input type="hidden" name="user_id" value="32"/>
+		<label>Title</label>
+		<input type="text" name="title"/>
 
-			<label>Content</label>
-			<input type="text" name="content" required/>
+		<label>Content</label>
+		<input type="text" name="content" required/>
 
-			<label>Headline</label>
-			<input type="text" name="headline" required/>
+		<label>Headline</label>
+		<input type="text" name="headline" required/>
 
 
-			<button type="submit" name="createBlogpost" value="createBlogpost">Create blogpost</button>
-		</form>
-		<div>
-			{{message}}</div>
-	</body>
-</html>
+		<button type="submit" name="createBlogpost" value="createBlogpost">Create blogpost</button>
+	</form>
+	<div>
+		{{message}}</div>
+
+{% endblock %}
