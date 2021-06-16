@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 		<meta charset="UTF-8"/>
 		<title>
 			{% block title %}Welcome!
@@ -11,16 +12,20 @@
 	</head>
 	<body>
 		<div class="topnav">
-			<a class="active" href="/?action=user/add">Register</a>
+			<a class="active" href="/user/add">Register</a>
 			<a href="/user/login">Login</a>
-			<a href="/blogpost/add">Write Blogpost</a>
 			<a href="/blogpost/listposts">Blogpost List</a>
+			{% if user.role == 1 %}
+				<a href="/blogpost/add">Write Blogpost</a>
+			{% endif %}
+			
 		</div>
-		<h2>Logout</h2>
+	    
 		<form action="/user/logout" method="post">
 
 			<button type="submit" name="logout" value="logout">Log out</button>
 		</form>
+		
 		{% block body %}{% endblock %}
 	</body>
 

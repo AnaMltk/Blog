@@ -36,4 +36,5 @@ class GetPostHelper
     {
         return $_POST[$key] ?? null;
     }
+
 }

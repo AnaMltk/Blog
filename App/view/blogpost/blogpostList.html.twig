@@ -1,18 +1,24 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-		<table>
-			<tbody>
+	<table>
+		<tbody>
 
-				{% for blogpost in blogposts %}
-					<tr>
-						<td><a href = '/blogpost/getPost/{{ blogpost.post_id }}'>{{ blogpost.post_id }}</a></td> 
-                        <td>{{ blogpost.title }}</td>
-                        <td>{{ blogpost.content }}</td>
-                    	
-					</tr>
-				{% endfor %}
+			{% for blogpost in blogposts %}
+				<tr>
+					<td>
+						<a href='/blogpost/getPost/{{ blogpost.post_id }}'>{{ blogpost.title }}</a>
+					</td>
+				</tr>
+				<tr>
+					<td>{{ blogpost.creation_date }}</td>
+				</tr>
+				<tr>
+					<td>{{ blogpost.headline }}</td>
+				</tr>
+			
+			{% endfor %}
 
-			</tbody>
-		</table>
+		</tbody>
+	</table>
 
 {% endblock %}

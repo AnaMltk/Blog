@@ -6,6 +6,7 @@ use \App\model\BlogpostManager;
 use \App\model\GetPostHelper;
 use \App\model\BlogpostModel;
 use App\model\CommentManager;
+use App\model\CommentModel;
 
 class BlogpostController extends AppController
 {
@@ -31,7 +32,9 @@ class BlogpostController extends AppController
     public function listPosts()
     {
         $blogpostManager = new BlogpostManager();
+       
         $blogposts = $blogpostManager->listPosts();
+        
         $this->view->display('blogpost/blogpostList.html.twig', ['blogposts' => $blogposts]);
     }
 
@@ -39,12 +42,28 @@ class BlogpostController extends AppController
     {
         $blogpostManager = new BlogpostManager();
         $commentManager = new CommentManager();
+       
+        $helper = new GetPostHelper();
         $comments = $commentManager->listComments($post_id);
-        //$helper = new GetPostHelper();
-        //$message = '';
         $blogpost = $blogpostManager->getPost($post_id);
-        var_dump($_SESSION['user']);
-        $this->view->display('blogpost/blogpostView.html.twig', ['blogpost' => $blogpost, 'comments' => $comments, 'user'=>$_SESSION['user'] ?? '']);
+        
+        if (null !== ($helper->getPost('publish'))) {
+            $commentModel = new CommentModel($_POST);
+            $commentManager->publish($commentModel->getCommentId());
+            $comments = $commentManager->listComments($post_id);
+         }
+
+         if (null !== ($helper->getPost('delete'))) {
+            $commentModel = new CommentModel($_POST);
+            $commentManager->delete($commentModel->getCommentId());
+            $comments = $commentManager->listComments($post_id);
+         }
+         $message = '';
+         if(isset($_SESSION['message']) && !empty($_SESSION['message'])){
+           $message = $_SESSION['message'];
+           $_SESSION['message'] = '';
+         }
+        $this->view->display('blogpost/blogpostView.html.twig', ['blogpost' => $blogpost, 'comments' => $comments, 'user'=>$_SESSION['user'] ?? '', 'message'=>$message]);
         return $blogpost;
     }
 
