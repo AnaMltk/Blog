@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<h2>About me
+	</h2>
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce lacus diam, tempor sed fringilla mattis, laoreet nec ipsum. Cras semper pulvinar ligula, eu ullamcorper ligula pharetra vitae. In ultrices, est ut vehicula sodales, erat augue gravida diam, non porta odio ligula posuere felis. Donec ac vehicula massa, vel elementum sem. Pellentesque a justo tristique, iaculis massa tincidunt, pretium tortor. Duis dapibus lacus in tristique consequat. Vestibulum venenatis facilisis leo eget aliquet. Phasellus a orci sed massa condimentum pellentesque sed in felis.</p>
+
+	<h2>Contact me</h2>
+	<form action="" method="post">
+
+		<label>Your name</label>
+		<input type="text" name="name" required/>
+
+
+		<label>Email</label>
+		<input type="text" name="email" required/>
+
+		<label>Message</label>
+		<input type="text" name="message" required/>
+
+
+		<button type="submit" name="send" value="send">Send</button>
+	</form>
+
+
+{% endblock %}
