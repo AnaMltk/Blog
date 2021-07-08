@@ -36,7 +36,7 @@ class UserManager extends Manager
         }
         $users = $this->getDb()->prepare('INSERT INTO user (login, password, email, role) VALUES (:login, :password, :email, :role)');
 
-        $users->execute([':login' => $user->getUserName(), ':password' => $password, ':email' => $user->getUserEmail(), ':role' => 1]);
+        $users->execute([':login' => $user->getUserName(), ':password' => $password, ':email' => $user->getUserEmail(), ':role' => 0]);
     }
 
     public function modifyPassword($password, $token)

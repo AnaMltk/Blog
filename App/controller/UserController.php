@@ -16,20 +16,22 @@ class UserController extends AppController
         $user = new UserManager();
         $helper = new GetPostHelper();
         $userModel = new UserModel();
+        $session = new Session();
         $message = '';
 
 
         if (null !== ($helper->getPost('register'))) {
-            if ($helper->getPost('CSRFToken') == $_SESSION['token']) {
+            //if ($helper->getPost('CSRFToken') == $_SESSION['token']) {
+                if($helper->getPost('CSRFToken')== $session->read('token')){
                 $userModel = new UserModel($helper->getPost());
-
                 $message = $user->add($userModel);
             }
         }
-        $_SESSION['token'] = $this->getToken();
+        $session->write('token', $this->getToken());
+        //$_SESSION['token'] = $this->getToken();
         //redirect user on homepage
 
-        $this->view->display('user/registration.html.twig', ['message' => $message, 'user' => $user, 'token' => $_SESSION['token']]);
+        $this->view->display('user/registration.html.twig', ['message' => $message, 'user' => $user, 'token' =>$session->read('token')]);
     }
 
     public function getUser($userId)
@@ -75,9 +77,10 @@ class UserController extends AppController
     public function logOut()
     {
         $helper = new GetPostHelper();
+        $session = new Session();
         //if (null !== ($helper->getPost('logout'))) {
-        $_SESSION = array();
-
+        //$_SESSION = array();
+        $session->delete();
         //}
         //$this->view->display('homepage.html.twig', ['user' => $_SESSION['user'] ?? '']);
         $this->view->redirect('/homepage/home');
@@ -87,9 +90,11 @@ class UserController extends AppController
     public function listUsers()
     {
         $userModel = new UserManager();
+        $session = new Session();
         $users = $userModel->listUsers();
 
-        $this->view->display('user/userslist.html.twig', ['users' => $users, 'user' => $_SESSION['user'] ?? '']);
+        //$this->view->display('user/userslist.html.twig', ['users' => $users, 'user' => $_SESSION['user'] ?? '']);
+        $this->view->display('user/userslist.html.twig', ['users' => $users, 'user' => $session->read('user') ?? '']);
     }
 
     public function resetPassword()

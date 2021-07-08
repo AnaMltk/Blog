@@ -13,7 +13,9 @@ class BlogpostController extends AppController
 
     public function add()
     {
+        $session = new Session();
         if (1 != $_SESSION['user']['role']) {
+            
             $this->view->redirect('/homepage/home');
         }
         $blogpost = new BlogpostManager();
@@ -27,16 +29,19 @@ class BlogpostController extends AppController
             $message = $blogpost->add($blogpostModel);
         }
 
-        $this->view->display('blogpost/createBlogpost.html.twig', ['message' => $message, 'blogpost' => $blogpost, 'user' => $_SESSION['user']]);
+        //$this->view->display('blogpost/createBlogpost.html.twig', ['message' => $message, 'blogpost' => $blogpost, 'user' => $_SESSION['user']]);
+        $this->view->display('blogpost/createBlogpost.html.twig', ['message' => $message, 'blogpost' => $blogpost, 'user' => $session->read('user')]);
     }
 
     public function listPosts()
     {
         $blogpostManager = new BlogpostManager();
+        $session = new Session();
 
         $blogposts = $blogpostManager->listPosts();
 
-        $this->view->display('blogpost/blogpostList.html.twig', ['blogposts' => $blogposts, 'user' => $_SESSION['user'] ??'']);
+        //$this->view->display('blogpost/blogpostList.html.twig', ['blogposts' => $blogposts, 'user' => $_SESSION['user'] ??'']);
+        $this->view->display('blogpost/blogpostList.html.twig', ['blogposts' => $blogposts, 'user' => $session('user') ??'']);
     }
 
     public function getPost($post_id)

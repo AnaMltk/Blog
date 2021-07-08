@@ -5,7 +5,7 @@ namespace App\model;
 class GetPostHelper
 {
 
-    public function getUserCredentials()
+   /* public function getUserCredentials()
     {
         $login = '';
         $password = '';
@@ -30,7 +30,7 @@ class GetPostHelper
             ];
         }
         return $userData;
-    }
+    }*/
 
     public function getPost($key = null)
     {
