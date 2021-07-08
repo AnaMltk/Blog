@@ -14,7 +14,7 @@ class BlogpostController extends AppController
     public function add()
     {
         if (1 != $_SESSION['user']['role']) {
-            header('Location: /homepage/home');
+            $this->view->redirect('/homepage/home');
         }
         $blogpost = new BlogpostManager();
         $helper = new GetPostHelper();
@@ -22,7 +22,7 @@ class BlogpostController extends AppController
 
         if (null !== ($helper->getPost('createBlogpost'))) {
 
-            $blogpostModel = new BlogpostModel($_POST);
+            $blogpostModel = new BlogpostModel($helper->getPost());
 
             $message = $blogpost->add($blogpostModel);
         }
@@ -48,17 +48,17 @@ class BlogpostController extends AppController
         $comments = $commentManager->listComments($post_id);
         $blogpost = $blogpostManager->getPost($post_id);
         if(empty($blogpost)){
-            header('Location: /homepage/home');
+            $this->view->redirect('/homepage/home');
         }
 
         if (null !== ($helper->getPost('publish'))) {
-            $commentModel = new CommentModel($_POST);
+            $commentModel = new CommentModel($helper->getPost());
             $commentManager->publish($commentModel->getCommentId());
             $comments = $commentManager->listComments($post_id);
         }
 
         if (null !== ($helper->getPost('delete'))) {
-            $commentModel = new CommentModel($_POST);
+            $commentModel = new CommentModel($helper->getPost());
             $commentManager->delete($commentModel->getCommentId());
             $comments = $commentManager->listComments($post_id);
         }
@@ -82,7 +82,7 @@ class BlogpostController extends AppController
         // $message = '';
         if (null !== ($helper->getPost('updateBlogpost'))) {
 
-            $blogpostModel = new BlogpostModel($_POST);
+            $blogpostModel = new BlogpostModel($helper->getPost());
 
             $blogpost = $blogpostManager->modify($blogpostModel);
         }
@@ -95,11 +95,11 @@ class BlogpostController extends AppController
     {
         $blogpostManager = new BlogpostManager();
         $helper = new GetPostHelper();
-        $blogpost = $blogpostManager->getPost($post_id);
+        //$blogpost = $blogpostManager->getPost($post_id);
         $message = '';
         //$postId = 2;
         if (null !== ($helper->getPost('deleteBlogpost'))) {
-            $blogpostModel = new BlogpostModel($_POST);
+            $blogpostModel = new BlogpostModel($helper->getPost());
             $message = $blogpostManager->delete($blogpostModel);
             //$message = $blogpostManager->delete($blogpostModel);
             // var_dump($message);

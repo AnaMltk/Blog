@@ -20,12 +20,13 @@ class CommentController extends AppController
 
         if (null !== ($helper->getPost('createComment'))) {
 
-            $commentModel = new CommentModel($_POST);
+            $commentModel = new CommentModel($helper->getPost());
            
            $message = $comment->add($commentModel); 
            $_SESSION['message'] = $message;
         }
-        header('Location: /blogpost/getPost/'.$commentModel->getPostId());
+        //header('Location: /blogpost/getPost/'.$commentModel->getPostId());
+        $this->view->redirect('/homepage/home'.$commentModel->getPostId());
         //$this->view->display('blogpost/blogpostView.html.twig', ['message' => $message, 'comment' => $comment]);
     }
 

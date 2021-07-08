@@ -20,12 +20,11 @@ class UserController extends AppController
 
 
         if (null !== ($helper->getPost('register'))) {
-            if($helper->getPost('CSRFToken') == $_SESSION['token']){
+            if ($helper->getPost('CSRFToken') == $_SESSION['token']) {
                 $userModel = new UserModel($helper->getPost());
 
                 $message = $user->add($userModel);
             }
-           
         }
         $_SESSION['token'] = $this->getToken();
         //redirect user on homepage
@@ -51,10 +50,11 @@ class UserController extends AppController
         $user = new UserManager();
         $helper = new GetPostHelper();
         $error = '';
-        $userData = $helper->getUserCredentials();
+        $userData = $helper->getPost();
+        //var_dump($userData); 
 
         if (!empty($userData)) {
-            $login = $userData['login'];
+            $login = $userData['username'];
             $password = $userData['password'];
 
 
@@ -80,8 +80,8 @@ class UserController extends AppController
 
         //}
         //$this->view->display('homepage.html.twig', ['user' => $_SESSION['user'] ?? '']);
-
-        header('Location: /user/listUsers');
+        $this->view->redirect('/homepage/home');
+        //header('Location: /user/listUsers');
     }
 
     public function listUsers()
@@ -102,7 +102,7 @@ class UserController extends AppController
         $messageBody = 'Please follow this link to reset your password : ';
         if (null !== ($helper->getPost('submit'))) {
 
-            $userModel = new UserModel($_POST);
+            $userModel = new UserModel($helper->getPost());
             $token = $user->getTokenForPasswordReset($userModel->getUserEmail());
             $url = 'blog/user/modifyPassword/' . $token;
             $messageBody = $messageBody . ' ' . $url;
@@ -122,7 +122,7 @@ class UserController extends AppController
 
         if (null !== ($helper->getPost('submit'))) {
 
-            $userManager->modifyPassword($_POST['password'], $token);
+            $userManager->modifyPassword($helper->getPost('password'), $token);
         }
 
         $this->view->display('user/newPassword.html.twig', ['token' => $token]);
