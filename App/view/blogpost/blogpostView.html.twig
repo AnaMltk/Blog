@@ -1,99 +1,168 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 
-	<table>
-		<tbody>
-
-
-			<tr>
-
-				<td>{{ blogpost.title }}</td>
-			</tr>
-			<tr>
-				<td>{{ blogpost.headline }}</td>
-			</tr>
-			<tr>
-				<td>{{ blogpost.content }}</td>
-			</tr>
-
-		</tbody>
-	</table>
-	{% if user.role == 1 %}
-
-		<h2>Update a Blogpost</h2>
-		<form method="post" action="/blogpost/modify/{{blogpost.post_id}}" name="blogpost-update-form">
-			<input type="hidden" name="user_id" value="{{blogpost.user_id}}"/>
-			<input type="hidden" name="post_id" value="{{blogpost.post_id}}"/>
-			<label>Title</label>
-			<input type="text" name="title" value="{{blogpost.title}}"/>
-			<br>
-			<label>Content</label>
-			<input type="text" name="content" value="{{blogpost.content}}" required/>
-			<br>
-			<label>Headline</label>
-			<input type="text" name="headline" value="{{blogpost.headline}}" required/>
-
-
-			<button type="submit" name="updateBlogpost" value="updateBlogpost">Update blogpost</button>
-		</form>
-
-		<br>
-		<form method="post" action="/blogpost/delete/{{blogpost.post_id}}" name="blogpost-delete">
-			<input type="hidden" name="post_id" value="{{blogpost.post_id}}"/>
-			<button type="submit" name="deleteBlogpost" value="deleteBlogpost">Delete blogpost</button>
-		</form>
-	{% endif %}
-
-	<h2>Write a comment</h2>
-
-	<form method="post" action="/comment/add" name="comment-creation-form">
-		<input type="hidden" name="user_id" value="{{user.user_id}}"/>
-		<input type="hidden" name="post_id" value="{{blogpost.post_id}}"/>
-
-		<label>Content</label>
-		<input type="text" name="content" required/>
-
-		<button type="submit" name="createComment" value="createComment">Create comment</button>
-	</form>
-
-	{% if message %}
-		<div class='alert alert-danger'>
-			{{message}}
+	<article class="mb-4">
+		<div class="container px-4 px-lg-5">
+			<div class="row gx-4 gx-lg-5 justify-content-center">
+				<div class="col-md-10 col-lg-8 col-xl-7">
+					<h2>{{ blogpost.title }}</h2>
+					{{ blogpost.content }}
+				</div>
+			</div>
 		</div>
-	{% endif %}
+	</article>
 
-	<table>
 
-		<tbody>
-			{% for comment in comments %}
+	<div class="mb-4">
+		<div class="container px-4 px-lg-5">
+			<div class="row gx-4 gx-lg-5 justify-content-center">
+				<div class="col-md-10 col-lg-8 col-xl-7">
+					{% if user.role == 1 %}
+						<h2>Update a Blogpost</h2>
+						<form method="post" action="/blogpost/modify/{{blogpost.post_id}}" name="blogpost-update-form">
+							<input type="hidden" name="user_id" value="{{blogpost.user_id}}"/>
+							<input type="hidden" name="post_id" value="{{blogpost.post_id}}"/>
+							<div class="form-floating">
 
-				<tr>
+								<input class="form-control" type="text" id="title" name="title" value="{{blogpost.title}}"/>
+								<label for="title">Title</label>
 
-					<td>{{ comment.creation_date }}</td>
-				</tr>
+							</div>
 
-				<tr>
-					<td>{{ comment.content }}</td>
-				</tr>
+							<div class="form-floating">
 
-				<tr>
-					{% if user.role == 1 and comment.published == 0 %}
-						<form method="post" action="" name="publish-comment">
-							<input type="hidden" name="comment_id" value="{{comment.comment_id}}"/>
-							<td>
-								<button type="submit" name="publish" value="publish">Publish</button>
-							</td>
-							<td>
-								<button type="submit" name="delete" value="delete">Delete</button>
-							</td>
+								<textarea class="form-control" type="text" id="headline" name="headline"/>{{blogpost.headline}}</textarea>
+								<label for="headline">Headline</label>
+
+							</div>
+                            
+							<div class="form-floating">
+                                
+								<textarea class="form-control" type="text" id="content" name="content" style="height: 12rem"/>{{blogpost.content}}</textarea>
+								<label for="content">Content</label>
+
+							</div>
+							
+
+							{#<label>Title</label>
+							<input type="text" name="title" value="{{blogpost.title}}"/>
+							<br>
+							<label>Content</label>
+							<input type="text" name="content" value="{{blogpost.content}}" required/>
+							<br>
+							<label>Headline</label>
+							<input type="text" name="headline" value="{{blogpost.headline}}" required/>#}
+
+
+							<button type="submit" class="btn btn-success" name="updateBlogpost" value="updateBlogpost">Update blogpost</button>
+
 						</form>
+
+						<br>
+						<form method="post" action="/blogpost/delete/{{blogpost.post_id}}" name="blogpost-delete">
+							<input type="hidden" name="post_id" value="{{blogpost.post_id}}"/>
+							<button type="submit" class="btn btn-danger" name="deleteBlogpost" value="deleteBlogpost">Delete blogpost</button>
+						</form>
+						<br>
 					{% endif %}
 
-				</tr>
-			{% endfor %}
-		</tbody>
+					<section class="mb-5">
+						<div class="card bg-light">
+							<div
+								class="card-body">
+								<!-- Comment form-->
+								<form class="mb-4" method="post" action="/comment/add" name="comment-creation-form">
+									<input type="hidden" name="user_id" value="{{user.user_id}}"/>
+									<input type="hidden" name="post_id" value="{{blogpost.post_id}}"/>
+									<textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!" name="content" required></textarea>
+									<button type="submit" class="btn btn-success" name="createComment" value="createComment">Create comment</button>
+								</form>
+								{% if message %}
+									<div class='alert alert-danger'>
+										{{message}}
+									</div>
+								{% endif %}
 
-	</table>
+								<!-- Single comment-->
+								<div class="d-flex">
+									
+
+									<div class="ms-3">
+										{% for comment in comments %}
+											<div class="fw-bold">{{ comment.creation_date }}</div>
+											{{ comment.content }}
+
+											{% if user.role == 1 and comment.published == 0 %}
+												<form method="post" action="" name="publish-comment">
+													<input type="hidden" name="comment_id" value="{{comment.comment_id}}"/>
+													<td>
+														<button type="submit" name="publish" value="publish">Publish</button>
+													</td>
+													<td>
+														<button type="submit" name="delete" value="delete">Delete</button>
+													</td>
+												</form>
+											{% endif %}
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
 
 
+					{#<h2>Write a comment</h2>
+										
+															<form method="post" action="/comment/add" name="comment-creation-form">
+																<input type="hidden" name="user_id" value="{{user.user_id}}"/>
+																<input type="hidden" name="post_id" value="{{blogpost.post_id}}"/>
+										
+																<label>Content</label>
+																<input type="text" name="content" required/>
+										
+																<button type="submit" name="createComment" value="createComment">Create comment</button>
+															</form>
+										
+															{% if message %}
+																<div class='alert alert-danger'>
+																	{{message}}
+																</div>
+															{% endif %}
+										
+															<table>
+										
+																<tbody>
+																	{% for comment in comments %}
+										
+																		<tr>
+										
+																			<td>{{ comment.creation_date }}</td>
+																		</tr>
+										
+																		<tr>
+																			<td>{{ comment.content }}</td>
+																		</tr>
+										
+																		<tr>
+																			{% if user.role == 1 and comment.published == 0 %}
+																				<form method="post" action="" name="publish-comment">
+																					<input type="hidden" name="comment_id" value="{{comment.comment_id}}"/>
+																					<td>
+																						<button type="submit" name="publish" value="publish">Publish</button>
+																					</td>
+																					<td>
+																						<button type="submit" name="delete" value="delete">Delete</button>
+																					</td>
+																				</form>
+																			{% endif %}
+										
+																		</tr>
+																	{% endfor %}
+																</tbody>
+										
+															</table> #}
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

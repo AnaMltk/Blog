@@ -25,26 +25,46 @@ class UserManager extends Manager
         $emailQuery = $this->getDb()->prepare('SELECT email FROM user WHERE email = ?');
         $emailQuery->execute(array($user->getUserEmail()));
         $existantEmail = $emailQuery->fetch(\PDO::FETCH_ASSOC);
-        
+
         if (!empty($existantEmail)) {
 
             $error[] = 'Email already exists';
         }
-        
+
         if ($error) {
             return $error;
         }
         $users = $this->getDb()->prepare('INSERT INTO user (login, password, email, role) VALUES (:login, :password, :email, :role)');
 
         $users->execute([':login' => $user->getUserName(), ':password' => $password, ':email' => $user->getUserEmail(), ':role' => 1]);
-
     }
 
-    public function modifyPassword($password, $userId)
+    public function modifyPassword($password, $token)
     {
-        $statement = $this->getDb()->prepare('UPDATE user SET password = ? WHERE user_id = ?');
-        $user = $statement->execute(array($password, $userId));
-        return $user;
+        $password = \password_hash($password, PASSWORD_BCRYPT);
+        $statement = $this->getDb()->prepare('UPDATE user SET password = :password WHERE token = :token');
+        $statement->execute([':password'=>$password, ':token'=>$token]);
+        $statement = $this->getDb()->prepare('UPDATE user SET token = null WHERE token = :token');
+        $statement->execute([':token'=>$token]);
+        
+    }
+
+    public function getTokenForPasswordReset($email)
+    {
+        $statement = $this->getDb()->prepare('SELECT email FROM user WHERE email = ?');
+        $statement->execute(array($email));
+       
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        
+        $token = '';
+        if (!empty($result)) {
+            $token = bin2hex(random_bytes(50));
+        }
+        
+        $statement = $this->getDb()->prepare('UPDATE user SET token =:token WHERE email = :email');
+        $statement->execute([':token'=>$token, ':email'=>$email]);
+        
+        return $token;
     }
 
     public function getUser($userId)
@@ -78,13 +98,11 @@ class UserManager extends Manager
 
         $credentials = $this->getCredentials($email);
         if (!$credentials) {
-            echo 'Wrong email';
             return false;
         }
 
         $checkPassword = password_verify($password, $credentials['password']);
         if (!$checkPassword) {
-            echo 'Wrong password';
             return false;
         }
         if (password_needs_rehash($password, PASSWORD_BCRYPT)) {
@@ -94,4 +112,6 @@ class UserManager extends Manager
         }
         return $credentials['user_id'];
     }
+
+    
 }

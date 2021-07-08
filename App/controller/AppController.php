@@ -11,4 +11,9 @@ class AppController
         $this->view = new ViewController();
         
     }
+
+    protected function getToken()
+    {
+        return bin2hex(random_bytes(32));
+    }
 }

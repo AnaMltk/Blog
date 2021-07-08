@@ -3,7 +3,7 @@
 
 		<h2>Sign Up</h2>
 		<form method="post" action="" name="signup-form">
-
+            <input type="hidden" name="CSRFToken" value="{{ token }}"
 			<label>Username</label>
 			<input type="text" name="username" pattern="[a-zA-Z0-9]+"/>
 

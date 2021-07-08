@@ -32,9 +32,12 @@ class GetPostHelper
         return $userData;
     }
 
-    public function getPost($key)
+    public function getPost($key = null)
     {
-        return $_POST[$key] ?? null;
+        if($key){
+            return $_POST[$key]?? null;
+        }
+        return $_POST;
     }
 
 }

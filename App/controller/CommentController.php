@@ -21,7 +21,7 @@ class CommentController extends AppController
         if (null !== ($helper->getPost('createComment'))) {
 
             $commentModel = new CommentModel($_POST);
-
+           
            $message = $comment->add($commentModel); 
            $_SESSION['message'] = $message;
         }

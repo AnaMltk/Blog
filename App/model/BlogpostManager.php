@@ -38,7 +38,8 @@ class BlogpostManager extends Manager
     {
         $statement = $this->getDb()->prepare('SELECT * FROM blogpost WHERE post_id = ?');
         $statement->execute(array($postId));
-        $blogpost = $statement->fetchObject();
+        $blogpost = $statement->fetch(\PDO::FETCH_ASSOC);
+       
         return $blogpost;
     }
 

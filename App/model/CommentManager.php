@@ -6,7 +6,12 @@ namespace App\model;
 class CommentManager extends Manager
 {
 
-    public function add($comment)
+    /**
+     * @param mixed $comment
+     * 
+     * @return string
+     */
+    public function add($comment):string
     {
         $message = 'Only registered users can write comments';
         if (!empty($_SESSION['user'])) {
@@ -25,12 +30,22 @@ class CommentManager extends Manager
         return $message;
     }
 
+    /**
+     * @param mixed $commentId
+     * 
+     * @return [type]
+     */
     public function publish($commentId)
     {
         $statement = $this->getDb()->prepare('UPDATE comment SET published = 1 WHERE comment_id = ?');
         $statement->execute(array($commentId));
     }
 
+    /**
+     * @param mixed $commentId
+     * 
+     * @return [type]
+     */
     public function getComment($commentId)
     {
         $statement = $this->getDb()->prepare('SELECT * FROM comment WHERE comment_id = ?');
@@ -39,7 +54,12 @@ class CommentManager extends Manager
         return $comment;
     }
 
-    public function listComments($postId)
+    /**
+     * @param mixed $postId
+     * 
+     * @return array
+     */
+    public function listComments($postId):array
     {
         $statement = $this->getDb()->prepare('SELECT * FROM comment WHERE post_id = ? AND published = 1 ORDER BY creation_date DESC');
         if (isset($_SESSION['user']) && 1 == $_SESSION['user']['role']) {
@@ -50,13 +70,17 @@ class CommentManager extends Manager
         return $comments;
     }
 
+    /**
+     * @param mixed $commentId
+     * 
+     * @return [type]
+     */
     public function delete($commentId)
     {
         $statement = $this->getDb()->prepare('DELETE FROM comment WHERE comment_id = :comment_id');
         $statement->execute([
             ':comment_id' => $commentId
         ]);
-        //var_dump($this->getPost($blogpost->getPostId()));
-        //return $this->getPost($blogpost->getPostId());
+        
     }
 }

@@ -1,24 +1,33 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-	<table>
-		<tbody>
+	
+	<div class="container px-4 px-lg-5">
+		<div class="row gx-4 gx-lg-5 justify-content-center">
+			<div
+				class="col-md-10 col-lg-8 col-xl-7">
+				<!-- Post preview-->
+				{% for blogpost in blogposts %}
+					<div class="post-preview">
+						<a href='/blogpost/getPost/{{ blogpost.post_id }}'>
+							<h2 class="post-title">{{ blogpost.title }}</h2>
+							<h3 class="post-subtitle">{{ blogpost.header }}</h3>
+						</a>
+						<p class="post-meta">
+							Posted by
+							<a href="#!">Anastasia Molotkova</a>
+							on
+							{{ blogpost.creation_date }}
+						</p>
+					</div>
+					<hr class="my-4"/>
+				{% endfor %}
 
-			{% for blogpost in blogposts %}
-				<tr>
-					<td>
-						<a href='/blogpost/getPost/{{ blogpost.post_id }}'>{{ blogpost.title }}</a>
-					</td>
-				</tr>
-				<tr>
-					<td>{{ blogpost.creation_date }}</td>
-				</tr>
-				<tr>
-					<td>{{ blogpost.headline }}</td>
-				</tr>
-			
-			{% endfor %}
 
-		</tbody>
-	</table>
-
+				<!-- Pager-->
+				<div class="d-flex justify-content-end mb-4">
+					<a class="btn btn-primary text-uppercase" href="#!">Older Posts →</a>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

@@ -1,18 +1,18 @@
 <?php
-require __DIR__.'/../../vendor/autoload.php';
+require __DIR__ . '/../../vendor/autoload.php';
+
+session_set_cookie_params(600, '/', $_SERVER['HTTP_HOST'], false, true);
 session_start();
 date_default_timezone_set('Europe/Paris');
-$page = $_GET['action']?? 'Blogpost/listPosts';
+$page = $_GET['action'] ?? 'homepage/home';
 $action = explode('/', $page);
-$controller = '\\App\\controller\\'.$action[0].'Controller';
+$controller = '\\App\\controller\\' . $action[0] . 'Controller';
 $ctrl = new $controller;
 $method = $action[1];
-$params = $action[2]??'';
-if(method_exists($ctrl, $method)){
+$params = $action[2] ?? '';
+if (method_exists($ctrl, $method)) {
     $ctrl->$method($params);
 } else {
-    echo 'method doesn\'t exist';
     $method = 'add';
     $ctrl->$method();
 }
-
