@@ -41,7 +41,7 @@ class BlogpostController extends AppController
         $blogposts = $blogpostManager->listPosts();
 
         //$this->view->display('blogpost/blogpostList.html.twig', ['blogposts' => $blogposts, 'user' => $_SESSION['user'] ??'']);
-        $this->view->display('blogpost/blogpostList.html.twig', ['blogposts' => $blogposts, 'user' => $session('user') ??'']);
+        $this->view->display('blogpost/blogpostList.html.twig', ['blogposts' => $blogposts, 'user' => $session->read('user') ??'']);
     }
 
     public function getPost($post_id)
