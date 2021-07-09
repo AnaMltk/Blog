@@ -16,13 +16,16 @@ class AdminpageController extends AppController
     public function admin()
     {
         $session = new Session();
+        $userInformation = $session->read('user');
+        $userRole = $userInformation['role'];
 
-        if (1 != $_SESSION['user']['role']) {
+        //if (1 != $_SESSION['user']['role']) {
+        if (1 != $userRole) {
             $this->view->redirect('/homepage/home');
         }
         $blogpostManager = new BlogpostManager();
         $blogposts = $blogpostManager->listPosts();
-        
+
         $commentManager = new CommentManager();
         $helper = new GetPostHelper();
         $commentModel = new CommentManager();
@@ -39,8 +42,8 @@ class AdminpageController extends AppController
             $unpublishedComments = $commentManager->listUnpublishedComments();
         }
 
-        
+
         $error = '';
-        $this->view->display('user/admin.html.twig', ['error' => $error, 'comments' => $unpublishedComments, 'blogposts'=>$blogposts, 'user' => $session->read('user') ?? '']);
+        $this->view->display('user/admin.html.twig', ['error' => $error, 'comments' => $unpublishedComments, 'blogposts' => $blogposts, 'user' => $session->read('user') ?? '']);
     }
 }

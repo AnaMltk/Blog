@@ -1,11 +1,25 @@
 {% extends 'base.html.twig' %}
+{% block header %}
+	<header class="masthead" style="background-image: url('/App/public/assets/img/test-bg.jpg')">
+		<div class="container position-relative px-4 px-lg-5">
+			<div class="row gx-4 gx-lg-5 justify-content-center">
+				<div class="col-md-10 col-lg-8 col-xl-7">
+					<div class="site-heading">
+						<h1>Modifier l'article</h1>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+{% endblock %}
 {% block body %}
 	<div class="mb-4">
 		<div class="container px-4 px-lg-5">
 			<div class="row gx-4 gx-lg-5 justify-content-center">
 				<div class="col-md-10 col-lg-8 col-xl-7">
 
-					<h2>Update a Blogpost</h2>
+					<h2>Modifier l'Article</h2>
 					<form method="post" action="/blogpost/modify/{{blogpost.post_id}}" name="blogpost-update-form">
 						<input type="hidden" name="user_id" value="{{blogpost.user_id}}"/>
 						<input type="hidden" name="post_id" value="{{blogpost.post_id}}"/>
@@ -13,7 +27,7 @@
 						<div class="form-floating">
 
 							<input class="form-control" type="text" id="title" name="title" value="{{blogpost.title}}"/>
-							<label for="title">Title</label>
+							<label for="title">Titre</label>
 
 						</div>
 
@@ -27,28 +41,28 @@
 					<div class="form-floating">
 
 						<textarea class="form-control" type="text" id="content" name="content" style="height: 12rem"/>{{blogpost.content}}</textarea>
-					<label for="content">Content</label>
+					<label for="content">Contenu</label>
 
 				</div>
 
 
 				{#<label>Title</label>
-																					<input type="text" name="title" value="{{blogpost.title}}"/>
-																					<br>
-																					<label>Content</label>
-																					<input type="text" name="content" value="{{blogpost.content}}" required/>
-																					<br>
-																					<label>Headline</label>
-																					<input type="text" name="headline" value="{{blogpost.headline}}" required/>#}
+																									<input type="text" name="title" value="{{blogpost.title}}"/>
+																									<br>
+																									<label>Content</label>
+																									<input type="text" name="content" value="{{blogpost.content}}" required/>
+																									<br>
+																									<label>Headline</label>
+																									<input type="text" name="headline" value="{{blogpost.headline}}" required/>#}
 
-
-				<button type="submit" class="btn btn-success" name="updateBlogpost" value="updateBlogpost">Update blogpost</button>
+				<br>
+				<button type="submit" class="btn btn-primary text-uppercase" name="updateBlogpost" value="updateBlogpost">Modifier</button>
 
 			</form>
 			<br>
 			<form method="post" action="/blogpost/delete/{{blogpost.post_id}}" name="blogpost-delete">
 				<input type="hidden" name="post_id" value="{{blogpost.post_id}}"/>
-				<button type="submit" class="btn btn-danger" name="deleteBlogpost" value="deleteBlogpost" onclick="return confirm('Are you sure?')">Delete blogpost</button>
+				<button type="submit" class="btn btn-danger" name="deleteBlogpost" value="deleteBlogpost" onclick="return confirm('Êtes vous sûr de vouloir supprimer cet article?')">Supprimer</button>
 			</form>
 		</div>
 	</div>

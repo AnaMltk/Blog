@@ -14,7 +14,11 @@ class BlogpostController extends AppController
     public function add()
     {
         $session = new Session();
-        if (1 != $_SESSION['user']['role']) {
+        $userInformation = $session->read('user');
+        $userRole = $userInformation['role'];
+
+        //if (1 != $_SESSION['user']['role']) {
+        if (1 != $userRole) {
 
             $this->view->redirect('/homepage/home');
         }
@@ -31,7 +35,7 @@ class BlogpostController extends AppController
         }
         $session->write('token', $this->getToken());
         //$this->view->display('blogpost/createBlogpost.html.twig', ['message' => $message, 'blogpost' => $blogpost, 'user' => $_SESSION['user']]);
-        $this->view->display('blogpost/createBlogpost.html.twig', ['message' => $message, 'blogpost' => $blogpost, 'user' => $session->read('user'), 'token' => $session->read('token'), 'commentToken' => $session->read('commentToken')]);
+        $this->view->display('blogpost/createBlogpost.html.twig', ['message' => $message, 'blogpost' => $blogpost, 'user' => $userInformation, 'token' => $session->read('token'), 'commentToken' => $session->read('commentToken')]);
     }
 
     public function listPosts()
@@ -71,7 +75,7 @@ class BlogpostController extends AppController
         $message = '';
         if (null !== $session->read('message') && !empty($session->read('message'))) {
             $message = $session->read('message');
-            $session->write('message','');
+            $session->write('message', '');
         }
         $this->view->display('blogpost/blogpostView.html.twig', ['blogpost' => $blogpost ?? '', 'comments' => $comments, 'user' => $session->read('user') ?? '', 'message' => $message]);
         return $blogpost;
@@ -82,6 +86,14 @@ class BlogpostController extends AppController
         $blogpostManager = new BlogpostManager();
         $helper = new GetPostHelper();
         $session = new Session();
+        $userInformation = $session->read('user');
+        $userRole = $userInformation['role'];
+
+        //if (1 != $_SESSION['user']['role']) {
+        if (1 != $userRole) {
+
+            $this->view->redirect('/homepage/home');
+        }
         // $blogpost = new BlogpostManager();
         $blogpost = $blogpostManager->getPost($post_id);
 
@@ -101,6 +113,15 @@ class BlogpostController extends AppController
 
     public function delete()
     {
+        $session = new Session();
+        $userInformation = $session->read('user');
+        $userRole = $userInformation['role'];
+
+        //if (1 != $_SESSION['user']['role']) {
+        if (1 != $userRole) {
+
+            $this->view->redirect('/homepage/home');
+        }
         $blogpostManager = new BlogpostManager();
         $helper = new GetPostHelper();
         //$blogpost = $blogpostManager->getPost($post_id);

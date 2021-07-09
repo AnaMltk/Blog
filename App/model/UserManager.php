@@ -12,14 +12,14 @@ class UserManager extends Manager
 
         $password = \password_hash($user->getUserPassword(), PASSWORD_BCRYPT);
 
-        $error = [];
+        $message = [];
         if (!filter_var($user->getUserEmail(), FILTER_VALIDATE_EMAIL)) {
 
-            $error[] = 'please enter valid email';
+            $message[] = 'Veuillez utiliser l\'email valide';
         }
         if (!preg_match("/[A-Za-z0-9]+/", $user->getUserName())) {
 
-            $error[] = 'please enter valid login';
+            $message[] = 'Veuillez utiliser un pseudo composé uniquement des lettres et chiffres';
         }
 
         $emailQuery = $this->getDb()->prepare('SELECT email FROM user WHERE email = ?');
@@ -28,15 +28,17 @@ class UserManager extends Manager
 
         if (!empty($existantEmail)) {
 
-            $error[] = 'Email already exists';
+            $message[] = 'Cet email est déjà utilisé';
         }
 
-        if ($error) {
-            return $error;
-        }
+        
         $users = $this->getDb()->prepare('INSERT INTO user (login, password, email, role) VALUES (:login, :password, :email, :role)');
 
         $users->execute([':login' => $user->getUserName(), ':password' => $password, ':email' => $user->getUserEmail(), ':role' => 0]);
+        if ($message) {
+            return $message;
+        }
+        return 'Votre compte a été créé avec success';
     }
 
     public function modifyPassword($password, $token)

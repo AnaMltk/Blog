@@ -17,20 +17,20 @@
 {% block body %}
 
 	<!--	<h2>Sign Up</h2>
-						<form method="post" action="" name="signup-form">
-				            <input type="hidden" name="CSRFToken" value="{{ token }}"
-							<label>Username</label>
-							<input type="text" name="username" pattern="[a-zA-Z0-9]+"/>
-				
-				            <label>Email</label>
-							<input type="text" name="useremail" required/>
-				
-							<label>Password</label>
-							<input type="password" name="userpassword" required/>
-				
-							<button type="submit" name="register" value="register">Create account</button>
-						</form>
-				<div> {{message}}</div>-->
+								<form method="post" action="" name="signup-form">
+						            <input type="hidden" name="CSRFToken" value="{{ token }}"
+									<label>Username</label>
+									<input type="text" name="username" pattern="[a-zA-Z0-9]+"/>
+						
+						            <label>Email</label>
+									<input type="text" name="useremail" required/>
+						
+									<label>Password</label>
+									<input type="password" name="userpassword" required/>
+						
+									<button type="submit" name="register" value="register">Create account</button>
+								</form>
+						<div> {{message}}</div>-->
 
 	<main class="mb-4">
 		<div class="container px-4 px-lg-5">
@@ -38,8 +38,8 @@
 				<div class="col-md-10 col-lg-8 col-xl-7">
 					<h2>Créez votre compte</h2>
 					<div class="my-5">
-						
-							<form action="" method="post" name="signup-form"> 
+
+						<form action="" method="post" name="signup-form">
 							<input type="hidden" name="token" value="{{ token }}"/>
 
 							<div class="form-floating">
@@ -61,12 +61,17 @@
 							</div>
 
 							<br/>
-							
-								
+
 
 							<button type="submit" class="btn btn-success" name="register" value="register">Créer votre compte</button>
-							
+
 						</form>
+						<br>
+						{% for mes in message %}
+							<div class='alert alert-danger'>
+								{{mes}}
+							</div>
+						{% endfor %}
 					</div>
 				</div>
 			</div>

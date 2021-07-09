@@ -31,7 +31,7 @@ class UserController extends AppController
         //$_SESSION['token'] = $this->getToken();
         //redirect user on homepage
 
-        $this->view->display('user/registration.html.twig', ['message' => $message, 'user' => $user, 'token' => $session->read('token')]);
+        $this->view->display('user/registration.html.twig', ['message' =>$message, 'user' => $user, 'token' => $session->read('token')]);
     }
 
     public function getUser($userId)
