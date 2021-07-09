@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+	<div class="mb-4">
+		<div class="container px-4 px-lg-5">
+			<div class="row gx-4 gx-lg-5 justify-content-center">
+				<div class="col-md-10 col-lg-8 col-xl-7">
+
+					<h2>Update a Blogpost</h2>
+					<form method="post" action="/blogpost/modify/{{blogpost.post_id}}" name="blogpost-update-form">
+						<input type="hidden" name="user_id" value="{{blogpost.user_id}}"/>
+						<input type="hidden" name="post_id" value="{{blogpost.post_id}}"/>
+						<input type="hidden" name="token" value="{{ token }}"/>
+						<div class="form-floating">
+
+							<input class="form-control" type="text" id="title" name="title" value="{{blogpost.title}}"/>
+							<label for="title">Title</label>
+
+						</div>
+
+						<div class="form-floating">
+
+							<textarea class="form-control" type="text" id="headline" name="headline"/>{{blogpost.headline}}</textarea>
+						<label for="headline">Headline</label>
+
+					</div>
+
+					<div class="form-floating">
+
+						<textarea class="form-control" type="text" id="content" name="content" style="height: 12rem"/>{{blogpost.content}}</textarea>
+					<label for="content">Content</label>
+
+				</div>
+
+
+				{#<label>Title</label>
+																					<input type="text" name="title" value="{{blogpost.title}}"/>
+																					<br>
+																					<label>Content</label>
+																					<input type="text" name="content" value="{{blogpost.content}}" required/>
+																					<br>
+																					<label>Headline</label>
+																					<input type="text" name="headline" value="{{blogpost.headline}}" required/>#}
+
+
+				<button type="submit" class="btn btn-success" name="updateBlogpost" value="updateBlogpost">Update blogpost</button>
+
+			</form>
+			<br>
+			<form method="post" action="/blogpost/delete/{{blogpost.post_id}}" name="blogpost-delete">
+				<input type="hidden" name="post_id" value="{{blogpost.post_id}}"/>
+				<button type="submit" class="btn btn-danger" name="deleteBlogpost" value="deleteBlogpost" onclick="return confirm('Are you sure?')">Delete blogpost</button>
+			</form>
+		</div>
+	</div>
+</div>{% endblock %}

@@ -38,6 +38,8 @@ class GetPostHelper
             return $_POST[$key]?? null;
         }
         return $_POST;
+        //$newpost = array_map ('htmlspecialchars', $_POST);
+        //return $newpost;
     }
 
 }

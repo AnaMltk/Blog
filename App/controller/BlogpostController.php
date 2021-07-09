@@ -15,7 +15,7 @@ class BlogpostController extends AppController
     {
         $session = new Session();
         if (1 != $_SESSION['user']['role']) {
-            
+
             $this->view->redirect('/homepage/home');
         }
         $blogpost = new BlogpostManager();
@@ -23,14 +23,15 @@ class BlogpostController extends AppController
         $message = '';
 
         if (null !== ($helper->getPost('createBlogpost'))) {
+            if ($helper->getPost('token') == $session->read('token')) {
+                $blogpostModel = new BlogpostModel($helper->getPost());
 
-            $blogpostModel = new BlogpostModel($helper->getPost());
-
-            $message = $blogpost->add($blogpostModel);
+                $message = $blogpost->add($blogpostModel);
+            }
         }
-
+        $session->write('token', $this->getToken());
         //$this->view->display('blogpost/createBlogpost.html.twig', ['message' => $message, 'blogpost' => $blogpost, 'user' => $_SESSION['user']]);
-        $this->view->display('blogpost/createBlogpost.html.twig', ['message' => $message, 'blogpost' => $blogpost, 'user' => $session->read('user')]);
+        $this->view->display('blogpost/createBlogpost.html.twig', ['message' => $message, 'blogpost' => $blogpost, 'user' => $session->read('user'), 'token' => $session->read('token'), 'commentToken' => $session->read('commentToken')]);
     }
 
     public function listPosts()
@@ -41,18 +42,18 @@ class BlogpostController extends AppController
         $blogposts = $blogpostManager->listPosts();
 
         //$this->view->display('blogpost/blogpostList.html.twig', ['blogposts' => $blogposts, 'user' => $_SESSION['user'] ??'']);
-        $this->view->display('blogpost/blogpostList.html.twig', ['blogposts' => $blogposts, 'user' => $session->read('user') ??'']);
+        $this->view->display('blogpost/blogpostList.html.twig', ['blogposts' => $blogposts, 'user' => $session->read('user') ?? '']);
     }
 
     public function getPost($post_id)
     {
         $blogpostManager = new BlogpostManager();
         $commentManager = new CommentManager();
-
+        $session = new Session();
         $helper = new GetPostHelper();
         $comments = $commentManager->listComments($post_id);
         $blogpost = $blogpostManager->getPost($post_id);
-        if(empty($blogpost)){
+        if (empty($blogpost)) {
             $this->view->redirect('/homepage/home');
         }
 
@@ -68,11 +69,11 @@ class BlogpostController extends AppController
             $comments = $commentManager->listComments($post_id);
         }
         $message = '';
-        if (isset($_SESSION['message']) && !empty($_SESSION['message'])) {
-            $message = $_SESSION['message'];
-            $_SESSION['message'] = '';
+        if (null !== $session->read('message') && !empty($session->read('message'))) {
+            $message = $session->read('message');
+            $session->write('message','');
         }
-        $this->view->display('blogpost/blogpostView.html.twig', ['blogpost' => $blogpost ?? '', 'comments' => $comments, 'user' => $_SESSION['user'] ?? '', 'message' => $message]);
+        $this->view->display('blogpost/blogpostView.html.twig', ['blogpost' => $blogpost ?? '', 'comments' => $comments, 'user' => $session->read('user') ?? '', 'message' => $message]);
         return $blogpost;
     }
 
@@ -80,23 +81,25 @@ class BlogpostController extends AppController
     {
         $blogpostManager = new BlogpostManager();
         $helper = new GetPostHelper();
+        $session = new Session();
         // $blogpost = new BlogpostManager();
         $blogpost = $blogpostManager->getPost($post_id);
 
 
         // $message = '';
         if (null !== ($helper->getPost('updateBlogpost'))) {
+            if ($helper->getPost('token') == $session->read('token')) {
+                $blogpostModel = new BlogpostModel($helper->getPost());
 
-            $blogpostModel = new BlogpostModel($helper->getPost());
-
-            $blogpost = $blogpostManager->modify($blogpostModel);
+                $blogpost = $blogpostManager->modify($blogpostModel);
+            }
         }
 
-
-        $this->view->display('blogpost/blogpostView.html.twig', ['blogpost' => $blogpost, 'user' => $_SESSION['user']]);
+        $session->write('token', $this->getToken());
+        $this->view->display('blogpost/blogpostUpdate.html.twig', ['blogpost' => $blogpost, 'user' => $session->read('user'), 'token' => $session->read('token')]);
     }
 
-    public function delete($post_id)
+    public function delete()
     {
         $blogpostManager = new BlogpostManager();
         $helper = new GetPostHelper();
@@ -109,7 +112,8 @@ class BlogpostController extends AppController
             //$message = $blogpostManager->delete($blogpostModel);
             // var_dump($message);
         }
-        $this->view->display('blogpost/blogpostView.html.twig', ['message' => $message, 'user' => $_SESSION['user']]);
+        $this->view->redirect('/adminpage/admin');
+        //$this->view->display('blogpost/blogpostView.html.twig', ['message' => $message, 'user' => $_SESSION['user']]);
         //header('Location: /?action=blogpost/listPosts');
     }
 }

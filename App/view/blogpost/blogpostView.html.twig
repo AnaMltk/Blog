@@ -1,11 +1,27 @@
 {% extends 'base.html.twig' %}
+
+{% block header %} 
+  <header class="masthead" style="background-image: url('/App/public/assets/img/test-bg.jpg')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="site-heading">
+                            <h1>{{ blogpost.title }}</h1>
+							<span class="meta">Ecrit par {{user.login}} le {{blogpost.creation_date}} </span>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+ {% endblock %}
 {% block body %}
 
 	<article class="mb-4">
 		<div class="container px-4 px-lg-5">
 			<div class="row gx-4 gx-lg-5 justify-content-center">
 				<div class="col-md-10 col-lg-8 col-xl-7">
-					<h2>{{ blogpost.title }}</h2>
+					<h2 class="section-heading">{{ blogpost.headline }}</h2>
 					{{ blogpost.content }}
 				</div>
 			</div>
@@ -17,7 +33,7 @@
 		<div class="container px-4 px-lg-5">
 			<div class="row gx-4 gx-lg-5 justify-content-center">
 				<div class="col-md-10 col-lg-8 col-xl-7">
-					{% if user.role == 1 %}
+					<!--{% if user.role == 1 %}
 						<h2>Update a Blogpost</h2>
 						<form method="post" action="/blogpost/modify/{{blogpost.post_id}}" name="blogpost-update-form">
 							<input type="hidden" name="user_id" value="{{blogpost.user_id}}"/>
@@ -64,7 +80,7 @@
 							<button type="submit" class="btn btn-danger" name="deleteBlogpost" value="deleteBlogpost">Delete blogpost</button>
 						</form>
 						<br>
-					{% endif %}
+					{% endif %}-->
 
 					<section class="mb-5">
 						<div class="card bg-light">
@@ -74,6 +90,7 @@
 								<form class="mb-4" method="post" action="/comment/add" name="comment-creation-form">
 									<input type="hidden" name="user_id" value="{{user.user_id}}"/>
 									<input type="hidden" name="post_id" value="{{blogpost.post_id}}"/>
+									<input type="hidden" name="commentToken" value="{{ commentToken }}"/>
 									<textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!" name="content" required></textarea>
 									<button type="submit" class="btn btn-success" name="createComment" value="createComment">Create comment</button>
 								</form>
@@ -92,7 +109,7 @@
 											<div class="fw-bold">{{ comment.creation_date }}</div>
 											{{ comment.content }}
 
-											{% if user.role == 1 and comment.published == 0 %}
+											<!--{% if user.role == 1 and comment.published == 0 %}
 												<form method="post" action="" name="publish-comment">
 													<input type="hidden" name="comment_id" value="{{comment.comment_id}}"/>
 													<td>
@@ -102,7 +119,7 @@
 														<button type="submit" name="delete" value="delete">Delete</button>
 													</td>
 												</form>
-											{% endif %}
+											{% endif %}-->
 										{% endfor %}
 									</div>
 								</div>

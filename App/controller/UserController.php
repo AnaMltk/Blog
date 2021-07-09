@@ -21,8 +21,8 @@ class UserController extends AppController
 
 
         if (null !== ($helper->getPost('register'))) {
-            //if ($helper->getPost('CSRFToken') == $_SESSION['token']) {
-                if($helper->getPost('CSRFToken')== $session->read('token')){
+            //if ($helper->getPost('token') == $_SESSION['token']) {
+            if ($helper->getPost('token') == $session->read('token')) {
                 $userModel = new UserModel($helper->getPost());
                 $message = $user->add($userModel);
             }
@@ -31,7 +31,7 @@ class UserController extends AppController
         //$_SESSION['token'] = $this->getToken();
         //redirect user on homepage
 
-        $this->view->display('user/registration.html.twig', ['message' => $message, 'user' => $user, 'token' =>$session->read('token')]);
+        $this->view->display('user/registration.html.twig', ['message' => $message, 'user' => $user, 'token' => $session->read('token')]);
     }
 
     public function getUser($userId)
@@ -51,10 +51,12 @@ class UserController extends AppController
     {
         $user = new UserManager();
         $helper = new GetPostHelper();
+        $session = new Session();
         $error = '';
         $userData = $helper->getPost();
+        
         //var_dump($userData); 
-
+        if($helper->getPost('token')== $session->read('token')){
         if (!empty($userData)) {
             $login = $userData['username'];
             $password = $userData['password'];
@@ -66,12 +68,14 @@ class UserController extends AppController
 
                 $this->view->redirect('/homepage/home');
             }
+
             $error = 'Wrong email or password, please try again';
         }
+         }
         // $error = 'wrong password';
+        $session->write('token', $this->getToken());
 
-
-        $this->view->display('user/login.html.twig', ['error' => $error]);
+        $this->view->display('user/login.html.twig', ['error' => $error, 'token'=>$session->read('token')]);
     }
 
     public function logOut()
@@ -101,22 +105,24 @@ class UserController extends AppController
     {
         $helper = new GetPostHelper();
         $user = new UserManager();
+        $session = new Session();
         $mailer = new Mailer();
         $token = '';
         $subject = 'Reset your password';
         $messageBody = 'Please follow this link to reset your password : ';
         if (null !== ($helper->getPost('submit'))) {
+            if ($helper->getPost('token') == $session->read('token')) {
+                $userModel = new UserModel($helper->getPost());
+                $token = $user->getTokenForPasswordReset($userModel->getUserEmail());
+                $url = 'blog/user/modifyPassword/' . $token;
+                $messageBody = $messageBody . ' ' . $url;
+                $mailer->sendMail($userModel->getUserEmail(), $subject, $messageBody);
+                //header('Location: modifyPassword/'.$token);
 
-            $userModel = new UserModel($helper->getPost());
-            $token = $user->getTokenForPasswordReset($userModel->getUserEmail());
-            $url = 'blog/user/modifyPassword/' . $token;
-            $messageBody = $messageBody . ' ' . $url;
-            $mailer->sendMail($userModel->getUserEmail(), $subject, $messageBody);
-            //header('Location: modifyPassword/'.$token);
-
+            }
         }
-
-        $this->view->display('user/resetPassword.html.twig', []);
+        $session->write('token', $this->getToken());
+        $this->view->display('user/resetPassword.html.twig', ['token' => $session->read('token')]);
     }
 
     public function modifyPassword($token)
@@ -133,10 +139,4 @@ class UserController extends AppController
         $this->view->display('user/newPassword.html.twig', ['token' => $token]);
     }
 
-    /* public function sendMail(){
-        $mailer = new Mailer();
-        $mailer->sendMail();
-        
-        header('Location: /user/listUsers');
-    }*/
 }

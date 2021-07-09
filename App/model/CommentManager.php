@@ -70,6 +70,14 @@ class CommentManager extends Manager
         return $comments;
     }
 
+    public function listUnpublishedComments()
+    {
+        $statement = $this->getDb()->prepare('SELECT * FROM comment WHERE published = 0 ORDER BY creation_date DESC');
+        $statement->execute();
+        $unpublishedComments =  $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $unpublishedComments;
+    }
+
     /**
      * @param mixed $commentId
      * 

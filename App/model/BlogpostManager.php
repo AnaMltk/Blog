@@ -10,7 +10,7 @@ class BlogpostManager extends Manager
     {
 
         $blogposts = $this->getDb()->prepare('INSERT INTO blogpost (user_id, title, creation_date, content, headline) VALUES (:user_id, :title, :creationDate, :content, :headline)');
-
+        $message = 'L\'article n\'a pas été créé';
         $blogposts->execute([
             ':user_id' => $blogpost->getUserId(),
             ':title' => $blogpost->getTitle(),
@@ -18,6 +18,8 @@ class BlogpostManager extends Manager
             ':content' => $blogpost->getContent(),
             ':headline' => $blogpost->getHeadline()
         ]);
+        $message = 'L\'article a été créé avec success';
+        return $message;
     }
 
     public function modify($blogpost)
