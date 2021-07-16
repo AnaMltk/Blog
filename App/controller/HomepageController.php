@@ -29,7 +29,7 @@ class HomepageController extends AppController
                 $messageBody = 'You have a new message ' . $helper->getPost('message');
                 $senderEmail = $helper->getPost('email');
                 $mailer->sendMail($senderEmail, $subject, $messageBody);
-                $session->write('message', 'Votre message a été envoyé avec success');
+                //$session->write('message', 'Votre message a été envoyé avec success');
                 //$message = 'Votre message a été envoyé avec success';
             }
         }
