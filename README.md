@@ -17,12 +17,25 @@ It consists of
 
 ## Installation
 
-1. Clone the repo
+### Clone the repo
 
-`git clone https://github.com/AnaMltk/Blog.git`
+```
+$ git clone https://github.com/AnaMltk/Blog.git
+$ composer update
+```
 
-2. Edit config.ini file.
+### Edit config.ini file.
+``` 
+[database]
+db_name     = ''
+db_user     = ''
+db_password = ''
+[SMTP]
+smtp_user_name = 'nobody@nowhere.com'
+smtp_password = ''
+smtp_address = ''
+smtp_port = ''
+```
+For **database** connection, assign the values to **db_name**, **db_user** and **db_password**.
 
-For database connection, assign the values to db_name, db_user and db_password.
-
-For smtp connection, assign the values to smtp_user_name, smtp_password, smtp_address and smtp_port.
+For **smtp** connection, assign the values to **smtp_user_name**, **smtp_password**, **smtp_address** and **smtp_port**.
