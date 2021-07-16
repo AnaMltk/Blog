@@ -34,7 +34,7 @@
 								{% for comment in comments %}
 									<tr>
 
-										<td>{{comment.post_id}}</td>
+										<td><a href='/blogpost/getPost/{{comment.post_id}}'>{{comment.post_id}}</a></td>
 										<td>{{comment.content}}</td>
 										<td>
 											<form method="post" action="" name="publish-comment">
@@ -70,7 +70,7 @@
 									<tr>
 
 										<td>{{blogpost.post_id}}</td>
-										<td>{{blogpost.title}}</td>
+										<td><a href='/blogpost/getPost/{{blogpost.post_id}}'>{{blogpost.title}}</a></td>
 										<td>
 											<a href="/blogpost/modify/{{blogpost.post_id}}">Modifier/Supprimer l'article</a>
 										</td>

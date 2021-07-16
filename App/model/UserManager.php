@@ -31,10 +31,11 @@ class UserManager extends Manager
             $message[] = 'Cet email est déjà utilisé';
         }
 
-        
-        $users = $this->getDb()->prepare('INSERT INTO user (login, password, email, role) VALUES (:login, :password, :email, :role)');
+        if (empty($message)) {
+            $users = $this->getDb()->prepare('INSERT INTO user (login, password, email, role) VALUES (:login, :password, :email, :role)');
 
-        $users->execute([':login' => $user->getUserName(), ':password' => $password, ':email' => $user->getUserEmail(), ':role' => 0]);
+            $users->execute([':login' => $user->getUserName(), ':password' => $password, ':email' => $user->getUserEmail(), ':role' => 0]);
+        }
         if ($message) {
             return $message;
         }
@@ -45,27 +46,26 @@ class UserManager extends Manager
     {
         $password = \password_hash($password, PASSWORD_BCRYPT);
         $statement = $this->getDb()->prepare('UPDATE user SET password = :password WHERE token = :token');
-        $statement->execute([':password'=>$password, ':token'=>$token]);
+        $statement->execute([':password' => $password, ':token' => $token]);
         $statement = $this->getDb()->prepare('UPDATE user SET token = null WHERE token = :token');
-        $statement->execute([':token'=>$token]);
-        
+        $statement->execute([':token' => $token]);
     }
 
     public function getTokenForPasswordReset($email)
     {
         $statement = $this->getDb()->prepare('SELECT email FROM user WHERE email = ?');
         $statement->execute(array($email));
-       
+
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
-        
+
         $token = '';
         if (!empty($result)) {
             $token = bin2hex(random_bytes(50));
         }
-        
+
         $statement = $this->getDb()->prepare('UPDATE user SET token =:token WHERE email = :email');
-        $statement->execute([':token'=>$token, ':email'=>$email]);
-        
+        $statement->execute([':token' => $token, ':email' => $email]);
+
         return $token;
     }
 
@@ -114,6 +114,4 @@ class UserManager extends Manager
         }
         return $credentials['user_id'];
     }
-
-    
 }

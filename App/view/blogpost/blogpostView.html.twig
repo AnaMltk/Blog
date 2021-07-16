@@ -22,7 +22,7 @@
 			<div class="row gx-4 gx-lg-5 justify-content-center">
 				<div class="col-md-10 col-lg-8 col-xl-7">
 					<h2 class="section-heading">{{ blogpost.headline }}</h2>
-					{{ blogpost.content }}
+					{{ blogpost.content|striptags('<p>')|raw }}
 				</div>
 			</div>
 		</div>
@@ -91,8 +91,8 @@
 									<input type="hidden" name="user_id" value="{{user.user_id}}"/>
 									<input type="hidden" name="post_id" value="{{blogpost.post_id}}"/>
 									<input type="hidden" name="commentToken" value="{{ commentToken }}"/>
-									<textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!" name="content" required></textarea>
-									<button type="submit" class="btn btn-success" name="createComment" value="createComment">Create comment</button>
+									<textarea class="form-control" rows="3" placeholder="Votre commentaire" name="content" required></textarea>
+									<button type="submit" class="btn btn-primary text-uppercase" name="createComment" value="createComment">Ecrire un commentaire</button>
 								</form>
 								{% if message %}
 									<div class='alert alert-danger'>
@@ -107,6 +107,7 @@
 									<div class="ms-3">
 										{% for comment in comments %}
 											<div class="fw-bold">{{ comment.creation_date }}</div>
+											<div class="fw-bold">Ecrit par {{ comment.login }}</div>
 											{{ comment.content }}
 
 											<!--{% if user.role == 1 and comment.published == 0 %}
