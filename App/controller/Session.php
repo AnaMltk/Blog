@@ -4,32 +4,32 @@ namespace App\controller;
 
 class Session
 {
-    /* static $instance;
 
-    static function getInstance()
-    {
-        if (!self::$instance) {
-            self::$instance = new Session();
-        }
-        return self::$instance;
-    }*/
-
-    /*public function __construct()
-    {
-        session_start();
-    }*/
-
-    public function write($key, $value)
+    /**
+     * @param mixed $key
+     * @param mixed $value
+     * 
+     * @return void
+     */
+    public function write($key, $value): void
     {
         $_SESSION[$key] = $value;
     }
 
+    /**
+     * @param mixed $key
+     * 
+     * @return array|null
+     */
     public function read($key)
     {
         return $_SESSION[$key] ?? null;
     }
 
-    public function delete()
+    /**
+     * @return array
+     */
+    public function delete(): array
     {
         return $_SESSION = array();
     }

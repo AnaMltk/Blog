@@ -2,24 +2,30 @@
 
 namespace App\controller;
 
-use \App\model\UserManager;
 use \App\model\BlogpostManager;
 use \App\model\CommentManager;
-use \App\model\Mailer;
 use \App\model\GetPostHelper;
-use \App\model\UserModel;
 use \App\model\CommentModel;
 
 class AdminpageController extends AppController
 {
+    /**
+     * @return void
+     */
+    public function index(): void
+    {
+        $this->view->redirect('/homepage/home');
+    }
 
-    public function admin()
+    /**
+     * @return void
+     */
+    public function admin(): void
     {
         $session = new Session();
         $userInformation = $session->read('user');
         $userRole = $userInformation['role'];
 
-        //if (1 != $_SESSION['user']['role']) {
         if (1 != $userRole) {
             $this->view->redirect('/homepage/home');
         }

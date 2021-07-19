@@ -12,50 +12,93 @@ class CommentModel extends Model
     protected $creation_date;
     protected $content;
 
-    public function getCommentId()
+    /**
+     * @return int
+     */
+    public function getCommentId():int
     {
         return $this->comment_id;
     }
-    public function getUserId()
+
+    /**
+     * @return int
+     */
+    public function getUserId():int
     {
         return $this->user_id;
     }
 
-    public function getPostId()
+    /**
+     * @return int
+     */
+    public function getPostId():int
     {
         return $this->post_id;
     }
 
-    public function getCreationDate()
+    /**
+     * @return string
+     */
+    public function getCreationDate():string
     {
         return $this->creation_date;
     }
 
-    public function getContent()
+    /**
+     * @return string
+     */
+    public function getContent():string
     {
         return $this->content;
     }
 
-    public function setCommentId($comment_id)
+    /**
+     * @param int $comment_id
+     * 
+     * @return void
+     */
+    public function setCommentId(int $comment_id):void
     {
         $this->comment_id = $comment_id;
     }
-    public function setUserId($user_id)
+
+    /**
+     * @param int $user_id
+     * 
+     * @return void
+     */
+    public function setUserId(int $user_id):void
     {
         $this->user_id = $user_id;
     }
 
-    public function setPostId($post_id)
+    /**
+     * @param int $post_id
+     * 
+     * @return void
+     */
+    public function setPostId(int $post_id):void
     {
         $this->post_id = $post_id;
     }
-    public function setCreationDate($creation_date)
+
+    /**
+     * @param string $creation_date
+     * 
+     * @return void
+     */
+    public function setCreationDate(string $creation_date):void
     {
 
         $this->creation_date = $creation_date;
     }
 
-    public function setContent($content)
+    /**
+     * @param string $content
+     * 
+     * @return void
+     */
+    public function setContent(string $content):void
     {
         $this->content = $content;
     }

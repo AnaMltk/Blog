@@ -2,12 +2,16 @@
 
 namespace App\model;
 
-use \App\model\UserModel;
 
 class UserManager extends Manager
 {
 
-    public function add($user)
+    /**
+     * @param UserModel $user
+     * 
+     * @return array
+     */
+    public function add(UserModel $user): array
     {
 
         $password = \password_hash($user->getUserPassword(), PASSWORD_BCRYPT);
@@ -35,23 +39,34 @@ class UserManager extends Manager
             $users = $this->getDb()->prepare('INSERT INTO user (login, password, email, role) VALUES (:login, :password, :email, :role)');
 
             $users->execute([':login' => $user->getUserName(), ':password' => $password, ':email' => $user->getUserEmail(), ':role' => 0]);
+            $message[] = 'Votre compte a été créé avec success';
         }
-        if ($message) {
-            return $message;
-        }
-        return 'Votre compte a été créé avec success';
+
+        return $message;
     }
 
-    public function modifyPassword($password, $token)
+    /**
+     * @param string $password
+     * @param string $token
+     * 
+     * @return string
+     */
+    public function modifyPassword(string $password, string $token): string
     {
         $password = \password_hash($password, PASSWORD_BCRYPT);
         $statement = $this->getDb()->prepare('UPDATE user SET password = :password WHERE token = :token');
         $statement->execute([':password' => $password, ':token' => $token]);
         $statement = $this->getDb()->prepare('UPDATE user SET token = null WHERE token = :token');
         $statement->execute([':token' => $token]);
+        return 'Votre mot de passe a été modifié avec succés';
     }
 
-    public function getTokenForPasswordReset($email)
+    /**
+     * @param string $email
+     * 
+     * @return string
+     */
+    public function getTokenForPasswordReset(string $email): string
     {
         $statement = $this->getDb()->prepare('SELECT email FROM user WHERE email = ?');
         $statement->execute(array($email));
@@ -69,7 +84,12 @@ class UserManager extends Manager
         return $token;
     }
 
-    public function getUser($userId)
+    /**
+     * @param int $userId
+     * 
+     * @return array
+     */
+    public function getUser(int $userId): array
     {
         $statement = $this->getDb()->prepare('SELECT user_id, login, email, role FROM user WHERE user_id = ?');
         $statement->execute(array($userId));
@@ -77,7 +97,12 @@ class UserManager extends Manager
         return $user;
     }
 
-    public function getCredentials($email)
+    /**
+     * @param string $email
+     * 
+     * @return array
+     */
+    public function getCredentials(string $email): array
     {
         $statement = $this->getDb()->prepare('SELECT user_id, password FROM user WHERE email = ?');
         $statement->execute(array($email));
@@ -87,7 +112,10 @@ class UserManager extends Manager
         return $result;
     }
 
-    public function listUsers()
+    /**
+     * @return array
+     */
+    public function listUsers(): array
     {
         $statement = $this->getDb()->prepare('SELECT user_id, login, email, role FROM user ORDER BY user_id DESC');
         $statement->execute();
@@ -95,7 +123,14 @@ class UserManager extends Manager
         return $users;
     }
 
-    public function logIn($email, $password)
+
+    /**
+     * @param string $email
+     * @param string $password
+     * 
+     * @return int
+     */
+    public function logIn(string $email, string $password): int
     {
 
         $credentials = $this->getCredentials($email);

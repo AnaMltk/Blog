@@ -12,39 +12,68 @@ class UserModel extends Model
   protected $userName;
   protected $userEmail;
   protected $userPassword;
-  protected const ROLE = 1;
+  
 
-  public function getUserId()
+  /**
+   * @return int
+   */
+  public function getUserId(): int
   {
     return $this->userId;
   }
 
-  public function getUserName()
+  /**
+   * @return string
+   */
+  public function getUserName(): string
   {
     return $this->userName;
   }
 
-  public function getUserEmail()
+  /**
+   * @return string
+   */
+  public function getUserEmail(): string
   {
     return $this->userEmail;
   }
 
-  public function getUserPassword()
+  /**
+   * @return string
+   */
+  public function getUserPassword(): string
   {
     return $this->userPassword;
   }
 
-  public function setUserName($userName)
+  /**
+   * @param string $userName
+   * 
+   * @return void
+   */
+  public function setUserName(string $userName): void
   {
 
     $this->userName = $userName;
   }
-  public function setUserEmail($userEmail)
+
+  /**
+   * @param string $userEmail
+   * 
+   * @return void
+   */
+  public function setUserEmail(string $userEmail): void
   {
 
     $this->userEmail = $userEmail;
   }
-  public function setUserPassword($userPassword)
+  
+  /**
+   * @param string $userPassword
+   * 
+   * @return void
+   */
+  public function setUserPassword(string $userPassword): void
   {
     $this->userPassword = $userPassword;
   }

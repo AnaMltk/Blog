@@ -6,11 +6,15 @@ namespace App\model;
 class BlogpostManager extends Manager
 {
 
-    public function add($blogpost)
+    /**
+     * @param BlogpostModel $blogpost
+     * 
+     * @return string
+     */
+    public function add(BlogpostModel $blogpost): string
     {
 
         $blogposts = $this->getDb()->prepare('INSERT INTO blogpost (user_id, title, creation_date, content, headline) VALUES (:user_id, :title, :creationDate, :content, :headline)');
-        $message = 'L\'article n\'a pas été créé';
         $blogposts->execute([
             ':user_id' => $blogpost->getUserId(),
             ':title' => $blogpost->getTitle(),
@@ -22,13 +26,20 @@ class BlogpostManager extends Manager
         return $message;
     }
 
-    public function modify($blogpost)
+
+    /**
+     * @param BlogpostModel $blogpost
+     * 
+     * @return array
+     */
+    public function modify(BlogpostModel $blogpost): array
     {
-        $statement = $this->getDb()->prepare('UPDATE blogpost SET title = :title, content = :content, headline = :headline WHERE post_id = :post_id');
+        $statement = $this->getDb()->prepare('UPDATE blogpost SET title = :title, content = :content, headline = :headline, modification_date = :modificationDate WHERE post_id = :post_id');
         $statement->execute([
             ':title' => $blogpost->getTitle(),
             ':content' => $blogpost->getContent(),
             ':headline' => $blogpost->getHeadline(),
+            ':modificationDate' => date('Y-m-d H:i:s'),
             ':post_id' => $blogpost->getPostId(),
         ]);
 
@@ -36,30 +47,41 @@ class BlogpostManager extends Manager
         return $this->getPost($blogpost->getPostId());
     }
 
-    public function getPost($postId)
+    /**
+     * @param int $postId
+     * 
+     * @return array
+     */
+    public function getPost(int $postId): array
     {
         $statement = $this->getDb()->prepare('SELECT * FROM blogpost WHERE post_id = ?');
         $statement->execute(array($postId));
         $blogpost = $statement->fetch(\PDO::FETCH_ASSOC);
-       
+
         return $blogpost;
     }
 
-    public function listPosts()
+    /**
+     * @return array
+     */
+    public function listPosts(): array
     {
         $statement = $this->getDb()->prepare('SELECT * FROM blogpost ORDER BY creation_date DESC');
         $statement->execute();
         $blogposts = $statement->fetchAll(\PDO::FETCH_ASSOC);
-        //var_dump($blogposts);
         return $blogposts;
     }
 
-    public function delete($blogpost)
+    /**
+     * @param BlogpostModel $blogpost
+     * 
+     * @return void
+     */
+    public function delete(BlogpostModel $blogpost): void
     {
         $statement = $this->getDb()->prepare('DELETE FROM blogpost WHERE post_id = :post_id');
         $statement->execute([
             ':post_id' => $blogpost->getPostId(),
         ]);
-        
     }
 }

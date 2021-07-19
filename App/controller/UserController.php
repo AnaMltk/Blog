@@ -3,7 +3,7 @@
 namespace App\controller;
 
 use \App\model\UserManager;
-use \App\model\Mailer;
+use \App\service\Mailer;
 use \App\model\GetPostHelper;
 use \App\model\UserModel;
 
@@ -11,7 +11,15 @@ use \App\model\UserModel;
 class UserController extends AppController
 {
 
-    public function add()
+    public function index()
+    {
+        $this->view->redirect('/homepage/home');
+    }
+
+    /**
+     * @return void
+     */
+    public function add(): void
     {
         $user = new UserManager();
         $helper = new GetPostHelper();
@@ -21,18 +29,24 @@ class UserController extends AppController
 
 
         if (null !== ($helper->getPost('register'))) {
-           
+
             if ($helper->getPost('token') == $session->read('token')) {
                 $userModel = new UserModel($helper->getPost());
                 $message = $user->add($userModel);
             }
         }
         $session->write('token', $this->getToken());
-    
-        $this->view->display('user/registration.html.twig', ['message' =>$message, 'user' => $user, 'token' => $session->read('token')]);
+
+        $this->view->display('user/registration.html.twig', ['message' => $message, 'user' => $user, 'token' => $session->read('token')]);
     }
 
-    public function getUser($userId)
+
+    /**
+     * @param int $userId
+     * 
+     * @return array
+     */
+    public function getUser(int $userId): array
     {
         $userManager = new UserManager();
 
@@ -41,47 +55,55 @@ class UserController extends AppController
         return $user;
     }
 
-    public function logIn()
+    /**
+     * @return void
+     */
+    public function logIn(): void
     {
         $user = new UserManager();
         $helper = new GetPostHelper();
         $session = new Session();
         $error = '';
         $userData = $helper->getPost();
-        
-        if($helper->getPost('token')== $session->read('token')){
-        if (!empty($userData)) {
-            $login = $userData['username'];
-            $password = $userData['password'];
+
+        if ($helper->getPost('token') == $session->read('token')) {
+            if (!empty($userData)) {
+                $login = $userData['username'];
+                $password = $userData['password'];
 
 
-            if ($user_id = $user->logIn($login, $password)) {
+                if ($user_id = $user->logIn($login, $password)) {
 
-                $session->write('user',$this->getUser($user_id));
+                    $session->write('user', $this->getUser($user_id));
 
-                $this->view->redirect('/homepage/home');
+                    $this->view->redirect('/homepage/home');
+                }
+
+                $error = 'Votre email ou mot de passe sont erronés, veuillez réessayer';
             }
-
-            $error = 'Wrong email or password, please try again';
         }
-         }
-        
+
         $session->write('token', $this->getToken());
 
-        $this->view->display('user/login.html.twig', ['error' => $error, 'token'=>$session->read('token')]);
+        $this->view->display('user/login.html.twig', ['error' => $error, 'token' => $session->read('token')]);
     }
 
-    public function logOut()
+    /**
+     * @return void
+     */
+    public function logOut(): void
     {
         $session = new Session();
-       
+
         $session->delete();
-      
+
         $this->view->redirect('/homepage/home');
-    
     }
 
-    public function listUsers()
+    /**
+     * @return void
+     */
+    public function listUsers(): void
     {
         $userModel = new UserManager();
         $session = new Session();
@@ -90,41 +112,62 @@ class UserController extends AppController
         $this->view->display('user/userslist.html.twig', ['users' => $users, 'user' => $session->read('user') ?? '']);
     }
 
-    public function resetPassword()
+    /**
+     * @return void
+     */
+    public function resetPassword(): void
     {
         $helper = new GetPostHelper();
         $user = new UserManager();
         $session = new Session();
         $mailer = new Mailer();
         $token = '';
-        $subject = 'Reset your password';
-        $messageBody = 'Please follow this link to reset your password : ';
+        $message = '';
+        $subject = 'Réinitialisez votre mot de passe';
+        $messageBody = 'Cliquez sur ce lien pour modifier votre mot de passe : ';
         if (null !== ($helper->getPost('submit'))) {
             if ($helper->getPost('token') == $session->read('token')) {
                 $userModel = new UserModel($helper->getPost());
                 $token = $user->getTokenForPasswordReset($userModel->getUserEmail());
-                $url = 'blog/user/modifyPassword/' . $token;
-                $messageBody = $messageBody . ' ' . $url;
-                $mailer->sendMail($userModel->getUserEmail(), $subject, $messageBody);
-
+                if (null != $token) {
+                    $url = 'blog/user/modifyPassword/' . $token;
+                    $messageBody = $messageBody . ' ' . $url;
+                    $mailer->sendMail($userModel->getUserEmail(), $subject, $messageBody);
+                } else {
+                    $message = 'Le compte avec cet email n\'existe pas';
+                }
             }
         }
+
+        if (null !== $session->read('message') && !empty($session->read('message'))) {
+            $message = $session->read('message');
+            $session->write('message', '');
+        }
         $session->write('token', $this->getToken());
-        $this->view->display('user/resetPassword.html.twig', ['token' => $session->read('token')]);
+        $this->view->display('user/resetPassword.html.twig', ['token' => $session->read('token'), 'message' => $message]);
     }
 
-    public function modifyPassword($token)
+    /**
+     * @param string $token
+     * 
+     * @return void
+     */
+    public function modifyPassword(string $token): void
     {
         $helper = new GetPostHelper();
         $userManager = new UserManager();
-
-
+        $session = new Session();
+        $message = '';
         if (null !== ($helper->getPost('submit'))) {
-
-            $userManager->modifyPassword($helper->getPost('password'), $token);
+            if ($helper->getPost('token') == $session->read('token')) {
+                $message = $userManager->modifyPassword($helper->getPost('password'), $token);
+            }
         }
-
-        $this->view->display('user/newPassword.html.twig', ['token' => $token]);
+        $session->write('token', $this->getToken());
+        if (null !== $session->read('message') && !empty($session->read('message'))) {
+            $message = $session->read('message');
+            $session->write('message', '');
+        }
+        $this->view->display('user/newPassword.html.twig', ['token' => $session->read('token'), 'message' => $message]);
     }
-
 }

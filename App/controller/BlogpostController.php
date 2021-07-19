@@ -10,8 +10,18 @@ use App\model\CommentModel;
 
 class BlogpostController extends AppController
 {
+    /**
+     * @return void
+     */
+    public function index(): void
+    {
+        $this->view->redirect('/homepage/home');
+    }
 
-    public function add()
+    /**
+     * @return void
+     */
+    public function add(): void
     {
         $session = new Session();
         $userInformation = $session->read('user');
@@ -33,11 +43,14 @@ class BlogpostController extends AppController
             }
         }
         $session->write('token', $this->getToken());
-        
+
         $this->view->display('blogpost/createBlogpost.html.twig', ['message' => $message, 'blogpost' => $blogpost, 'user' => $userInformation, 'token' => $session->read('token'), 'commentToken' => $session->read('commentToken')]);
     }
 
-    public function listPosts()
+    /**
+     * @return void
+     */
+    public function listPosts(): void
     {
         $blogpostManager = new BlogpostManager();
         $session = new Session();
@@ -47,15 +60,20 @@ class BlogpostController extends AppController
         $this->view->display('blogpost/blogpostList.html.twig', ['blogposts' => $blogposts, 'user' => $session->read('user') ?? '']);
     }
 
-    public function getPost($post_id)
+    /**
+     * @param int $post_id
+     * 
+     * @return array
+     */
+    public function getPost(int $post_id): array
     {
         $blogpostManager = new BlogpostManager();
         $commentManager = new CommentManager();
         $session = new Session();
         $helper = new GetPostHelper();
-       
+
         $comments = $commentManager->listComments($post_id);
-        
+
         $blogpost = $blogpostManager->getPost($post_id);
         if (empty($blogpost)) {
             $this->view->redirect('/homepage/home');
@@ -77,12 +95,17 @@ class BlogpostController extends AppController
             $message = $session->read('message');
             $session->write('message', '');
         }
-        
+
         $this->view->display('blogpost/blogpostView.html.twig', ['blogpost' => $blogpost ?? '', 'comments' => $comments, 'user' => $session->read('user') ?? '', 'message' => $message]);
         return $blogpost;
     }
 
-    public function modify($post_id)
+    /**
+     * @param int $post_id
+     * 
+     * @return void
+     */
+    public function modify(int $post_id): void
     {
         $blogpostManager = new BlogpostManager();
         $helper = new GetPostHelper();
@@ -94,7 +117,7 @@ class BlogpostController extends AppController
 
             $this->view->redirect('/homepage/home');
         }
-       
+
         $blogpost = $blogpostManager->getPost($post_id);
 
         if (null !== ($helper->getPost('updateBlogpost'))) {
@@ -109,7 +132,10 @@ class BlogpostController extends AppController
         $this->view->display('blogpost/blogpostUpdate.html.twig', ['blogpost' => $blogpost, 'user' => $session->read('user'), 'token' => $session->read('token')]);
     }
 
-    public function delete()
+    /**
+     * @return void
+     */
+    public function delete(): void
     {
         $session = new Session();
         $userInformation = $session->read('user');

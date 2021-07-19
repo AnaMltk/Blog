@@ -21,6 +21,6 @@ $params = $action[2] ?? '';
 if (method_exists($ctrl, $method)) {
     $ctrl->$method($params);
 } else {
-    $method = 'add';
+    $method = 'index';
     $ctrl->$method();
 }

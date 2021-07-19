@@ -1,17 +1,18 @@
 <?php
 
 namespace App\model;
+
 use \App\controller\Session;
 
 class CommentManager extends Manager
 {
 
     /**
-     * @param mixed $comment
+     * @param CommentModel $comment
      * 
      * @return string
      */
-    public function add($comment): string
+    public function add(CommentModel $comment): string
     {
         $session = new Session();
         $message = 'Seulement les utilisateurs enregistrés peuvent écrire des commentaires';
@@ -42,24 +43,24 @@ class CommentManager extends Manager
     }
 
     /**
-     * @param mixed $commentId
+     * @param int $commentId
      * 
-     * @return [type]
+     * @return array
      */
-    public function getComment($commentId)
+    public function getComment(int $commentId): array
     {
         $statement = $this->getDb()->prepare('SELECT comment.comment_id, comment.content, comment.post_id, comment.creation_date, comment.published, comment.user_id, user.login FROM comment INNER JOIN user ON comment.user_id=user.user_id WHERE comment_id = ?');
         $statement->execute(array($commentId));
-        $comment = $statement->fetchObject();
+        $comment = $statement->fetch(\PDO::FETCH_ASSOC);
         return $comment;
     }
 
     /**
-     * @param mixed $postId
+     * @param int $postId
      * 
      * @return array
      */
-    public function listComments($postId): array
+    public function listComments(int $postId): array
     {
         $session = new Session();
         $userInformation = $session->read('user');
@@ -74,7 +75,10 @@ class CommentManager extends Manager
         return $comments;
     }
 
-    public function listUnpublishedComments()
+    /**
+     * @return array
+     */
+    public function listUnpublishedComments(): array
     {
         $statement = $this->getDb()->prepare('SELECT * FROM comment WHERE published = 0 ORDER BY creation_date DESC');
         $statement->execute();
@@ -83,11 +87,11 @@ class CommentManager extends Manager
     }
 
     /**
-     * @param mixed $commentId
+     * @param int $commentId
      * 
-     * @return [type]
+     * @return void
      */
-    public function delete($commentId)
+    public function delete(int $commentId): void
     {
         $statement = $this->getDb()->prepare('DELETE FROM comment WHERE comment_id = :comment_id');
         $statement->execute([
