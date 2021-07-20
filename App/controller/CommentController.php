@@ -11,22 +11,33 @@ use \App\model\CommentManager;
 
 class CommentController extends AppController
 {
+    /**
+     * @return void
+     */
+    public function index(): void
+    {
+        $this->view->redirect('/homepage/home');
+    }
 
-    public function add()
+    /**
+     * @return void
+     */
+    public function add(): void
     {
         $comment = new CommentManager();
         $helper = new GetPostHelper();
+        $session = new Session();
         $message = '';
 
         if (null !== ($helper->getPost('createComment'))) {
+            if ($helper->getPost('commentToken') == $session->read('commentToken')) {
+                $commentModel = new CommentModel($helper->getPost());
 
-            $commentModel = new CommentModel($_POST);
-
-           $message = $comment->add($commentModel); 
-           $_SESSION['message'] = $message;
+                $message = $comment->add($commentModel);
+                $session->write('message', $message);
+            }
         }
-        header('Location: /blogpost/getPost/'.$commentModel->getPostId());
-        //$this->view->display('blogpost/blogpostView.html.twig', ['message' => $message, 'comment' => $comment]);
+        $session->write('commentToken', $this->getToken());
+        $this->view->redirect('/blogpost/getPost/' . $commentModel->getPostId());
     }
-
 }

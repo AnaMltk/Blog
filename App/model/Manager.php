@@ -10,7 +10,7 @@ abstract class Manager
     private static function dbConnect()
     
     {
-        $ini = parse_ini_file('config.ini');
+        $ini = parse_ini_file('../../config.ini');
         $database = $ini['db_name'];
         $dbUser = $ini['db_user'];
         $dbPassword = $ini['db_password'];

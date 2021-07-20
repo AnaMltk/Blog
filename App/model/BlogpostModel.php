@@ -15,69 +15,130 @@ class BlogpostModel extends Model
     protected $content;
     protected $headline;
 
-    public function getUserId()
+    /**
+     * @return int
+     */
+    public function getUserId(): int
     {
         return $this->user_id;
     }
 
-    public function getPostId()
+    /**
+     * @return int
+     */
+    public function getPostId(): int
     {
         return $this->post_id;
     }
 
-    public function getCreationDate()
+    /**
+     * @return string
+     */
+    public function getCreationDate(): string
     {
         return $this->creation_date;
     }
 
-    public function getModificationDate()
+    /**
+     * @return string
+     */
+    public function getModificationDate(): string
     {
         return $this->modification_date;
     }
 
-    public function getTitle()
+    /**
+     * @return string
+     */
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    public function getHeadline()
+    /**
+     * @return string
+     */
+    public function getHeadline(): string
     {
         return $this->headline;
     }
 
-    public function getContent()
+    /**
+     * @return string
+     */
+    public function getContent(): string
     {
         return $this->content;
     }
 
-    public function setUserId($user_id)
+    /**
+     * @param int $user_id
+     * 
+     * @return void
+     */
+    public function setUserId(int $user_id): void
     {
         $this->user_id = $user_id;
     }
 
-    public function setPostId($post_id)
+    /**
+     * @param int $post_id
+     * 
+     * @return void
+     */
+    public function setPostId(int $post_id): void
     {
         $this->post_id = $post_id;
     }
-    public function setCreationDate($creation_date)
+
+    /**
+     * @param string $creation_date
+     * 
+     * @return void
+     */
+    public function setCreationDate(string $creation_date): void
     {
 
         $this->creation_date = $creation_date;
     }
-    public function setModificationDate($modification_date)
+
+    /**
+     * @param string $modification_date
+     * 
+     * @return void
+     */
+    public function setModificationDate(string $modification_date): void
     {
 
         $this->modification_date = $modification_date;
     }
-    public function setTitle($title)
+
+    /**
+     * @param string $title
+     * 
+     * @return void
+     */
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
-    public function setContent($content)
+
+    /**
+     * @param string $content
+     * 
+     * @return void
+     */
+    public function setContent(string $content): void
     {
         $this->content = $content;
     }
-    public function setHeadline($headline)
+
+    /**
+     * @param string $headline
+     * 
+     * @return void
+     */
+    public function setHeadline(string $headline): void
     {
         $this->headline = $headline;
     }

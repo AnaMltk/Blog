@@ -1,24 +1,43 @@
 {% extends 'base.html.twig' %}
+
+{% block header %} 
+  <header class="masthead" style="background-image: url('/App/public/assets/img/background.jpg')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="site-heading">
+                            <h1>Tous les Articles</h1>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+ {% endblock %}
 {% block body %}
-	<table>
-		<tbody>
+	
+	<div class="container px-4 px-lg-5">
+		<div class="row gx-4 gx-lg-5 justify-content-center">
+			<div
+				class="col-md-10 col-lg-8 col-xl-7">
+				<!-- Post preview-->
+				{% for blogpost in blogposts %}
+					<div class="post-preview">
+						<a href='/blogpost/getPost/{{ blogpost.post_id }}'>
+							<h2 class="post-title">{{ blogpost.title }}</h2>
+							<h3 class="post-subtitle">{{ blogpost.headline }}</h3>
+						</a>
+						<p class="post-meta">
+							Écrit par
+							<a href="#!">Anastasia Molotkova</a>
+							le
+							{{ blogpost.creation_date }}
+						</p>
+					</div>
+					<hr class="my-4"/>
+				{% endfor %}
 
-			{% for blogpost in blogposts %}
-				<tr>
-					<td>
-						<a href='/blogpost/getPost/{{ blogpost.post_id }}'>{{ blogpost.title }}</a>
-					</td>
-				</tr>
-				<tr>
-					<td>{{ blogpost.creation_date }}</td>
-				</tr>
-				<tr>
-					<td>{{ blogpost.headline }}</td>
-				</tr>
-			
-			{% endfor %}
-
-		</tbody>
-	</table>
-
+			</div>
+		</div>
+	</div>
 {% endblock %}

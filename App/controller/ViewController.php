@@ -11,10 +11,29 @@ class ViewController
     public function __construct()
     {
 
-        $loader = new FilesystemLoader('App/view');
+        $loader = new FilesystemLoader('../view');
         $this->twig = new Environment($loader);
     }
-    public function display($page, $option){
+
+    /**
+     * @param mixed $page
+     * @param mixed $option
+     * 
+     * @return void
+     */
+    public function display($page, $option):void
+    {
         echo $this->twig->render($page, $option);
+    }
+
+    /**
+     * @param mixed $location
+     * 
+     * @return void
+     */
+    public function redirect($location):void
+    {
+        header('Location: ' . $location);
+        exit;
     }
 }

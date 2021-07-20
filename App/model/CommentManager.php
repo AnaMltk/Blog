@@ -2,15 +2,21 @@
 
 namespace App\model;
 
+use \App\controller\Session;
 
 class CommentManager extends Manager
 {
 
-    public function add($comment)
+    /**
+     * @param CommentModel $comment
+     * 
+     * @return string
+     */
+    public function add(CommentModel $comment): string
     {
-        $message = 'Only registered users can write comments';
-        if (!empty($_SESSION['user'])) {
-
+        $session = new Session();
+        $message = 'Seulement les utilisateurs enregistrés peuvent écrire des commentaires';
+        if (!empty($session->read('user'))) {
 
             $comments = $this->getDb()->prepare('INSERT INTO comment (user_id, post_id, creation_date, content) VALUES (:user_id, :post_id, :creationDate, :content)');
 
@@ -20,43 +26,76 @@ class CommentManager extends Manager
                 ':creationDate' => date('Y-m-d H:i:s'),
                 ':content' => $comment->getContent()
             ]);
-            $message = 'Thank you, your comment will be validated by the admin';
+            $message = 'Votre commentaire sera publié après la validation par Admin';
         }
         return $message;
     }
 
-    public function publish($commentId)
+    /**
+     * @param int $commentId
+     * 
+     * @return void
+     */
+    public function publish(int $commentId): void
     {
         $statement = $this->getDb()->prepare('UPDATE comment SET published = 1 WHERE comment_id = ?');
         $statement->execute(array($commentId));
     }
 
-    public function getComment($commentId)
+    /**
+     * @param int $commentId
+     * 
+     * @return array
+     */
+    public function getComment(int $commentId): array
     {
-        $statement = $this->getDb()->prepare('SELECT * FROM comment WHERE comment_id = ?');
+        $statement = $this->getDb()->prepare('SELECT comment.comment_id, comment.content, comment.post_id, comment.creation_date, comment.published, comment.user_id, user.login FROM comment INNER JOIN user ON comment.user_id=user.user_id WHERE comment_id = ?');
         $statement->execute(array($commentId));
-        $comment = $statement->fetchObject();
+        $comment = $statement->fetch(\PDO::FETCH_ASSOC);
         return $comment;
     }
 
-    public function listComments($postId)
+    /**
+     * @param int $postId
+     * 
+     * @return array
+     */
+    public function listComments(int $postId): array
     {
-        $statement = $this->getDb()->prepare('SELECT * FROM comment WHERE post_id = ? AND published = 1 ORDER BY creation_date DESC');
-        if (isset($_SESSION['user']) && 1 == $_SESSION['user']['role']) {
-            $statement = $this->getDb()->prepare('SELECT * FROM comment WHERE post_id = ? ORDER BY creation_date DESC');
+        $session = new Session();
+        $userInformation = $session->read('user');
+        $userRole = $userInformation['role'];
+
+        $statement = $this->getDb()->prepare('SELECT comment.comment_id, comment.content, comment.post_id, comment.creation_date, comment.published, comment.user_id, user.login FROM comment INNER JOIN user ON comment.user_id=user.user_id WHERE post_id = ? AND published = 1 ORDER BY creation_date DESC');
+        if (isset($userInformation) && 1 == $userRole) {
+            $statement = $this->getDb()->prepare('SELECT comment.comment_id, comment.content, comment.post_id, comment.creation_date, comment.published, comment.user_id, user.login FROM comment INNER JOIN user ON comment.user_id=user.user_id WHERE post_id = ? ORDER BY creation_date DESC');
         }
         $statement->execute(array($postId));
         $comments = $statement->fetchAll(\PDO::FETCH_ASSOC);
         return $comments;
     }
 
-    public function delete($commentId)
+    /**
+     * @return array
+     */
+    public function listUnpublishedComments(): array
+    {
+        $statement = $this->getDb()->prepare('SELECT * FROM comment WHERE published = 0 ORDER BY creation_date DESC');
+        $statement->execute();
+        $unpublishedComments = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $unpublishedComments;
+    }
+
+    /**
+     * @param int $commentId
+     * 
+     * @return void
+     */
+    public function delete(int $commentId): void
     {
         $statement = $this->getDb()->prepare('DELETE FROM comment WHERE comment_id = :comment_id');
         $statement->execute([
             ':comment_id' => $commentId
         ]);
-        //var_dump($this->getPost($blogpost->getPostId()));
-        //return $this->getPost($blogpost->getPostId());
     }
 }

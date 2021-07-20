@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block header %} 
+  <header class="masthead" style="background-image: url('/App/public/assets/img/background.jpg')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="site-heading">
+                            <h1>Page d'administration</h1>
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+ {% endblock %}
+
+{% block body %}
+	<main class="mb-4">
+		<div class="container px-4 px-lg-5">
+			<div class="row gx-4 gx-lg-5 justify-content-center">
+				<div class="col-md-10 col-lg-8 col-xl-7">
+                <h2 clas="post-title">Commentaires à valider</h2>
+					<div class="table-responsive">
+						<table class="table w-auto">
+							<thead>
+								<tr>
+									<th>ID d'article</th>
+									<th>Commentaire</th>
+
+								</tr>
+							</thead>
+							<tbody>
+								{% for comment in comments %}
+									<tr>
+
+										<td><a href='/blogpost/getPost/{{comment.post_id}}'>{{comment.post_id}}</a></td>
+										<td>{{comment.content}}</td>
+										<td>
+											<form method="post" action="" name="publish-comment">
+												<input type="hidden" name="comment_id" value="{{comment.comment_id}}"/>
+												<td>
+													<button type="submit" class="btn btn-primary text-uppercase" name="publish" value="publish">Publier</button>
+												</td>
+												<td>
+													<button type="submit" class="btn btn-primary text-uppercase" name="delete" value="delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire?')">Supprimer</button>
+
+												</td>
+											</form>
+										</td>
+
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+                    <br>
+                    <h2>La Liste des Articles</h2>
+					<div class="table-responsive">
+						<table class="table w-auto">
+							<thead>
+								<tr>
+									<th>ID d'article</th>
+									<th>Titre</th>
+
+								</tr>
+							</thead>
+							<tbody>
+								{% for blogpost in blogposts %}
+									<tr>
+
+										<td>{{blogpost.post_id}}</td>
+										<td><a href='/blogpost/getPost/{{blogpost.post_id}}'>{{blogpost.title}}</a></td>
+										<td>
+											<a href="/blogpost/modify/{{blogpost.post_id}}">Modifier/Supprimer l'article</a>
+										</td>
+										
+									</tr>
+								</form>
+							</tbody>
+						</td>
+
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div></div></div></main>{% endblock %}
