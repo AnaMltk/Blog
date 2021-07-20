@@ -4,16 +4,16 @@
 
 This is a professional blog presenting myself as a developper. 
 It consists of 
-- the section visible for all users - homepage with contact form, list of all blogposts and blogpot page
-- the comment section which can only be used by registered users
-- the admin section which is only accessible by the admin - page for new blogpost creation, pages to modify and/or delete a blogpost, admin dashboard with comment management
+-   the section visible for all users - homepage with contact form, list of all blogposts and blogpot page
+-   the comment section which can only be used by registered users
+-   the admin section which is only accessible by the admin - page for new blogpost creation, pages to modify and/or delete a blogpost, admin dashboard with comment management
 
 
 ## Prerequisites
 
- - PHP 7 or higher
- - Mysql
- - Composer
+ -   PHP 7 or higher
+ -   Mysql
+ -   Composer
 
 ## Installation
 
