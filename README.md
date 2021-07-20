@@ -24,7 +24,7 @@ $ git clone https://github.com/AnaMltk/Blog.git
 $ composer update
 ```
 
-### Edit config.ini file.
+### Edit config.ini file
 ``` 
 [database]
 db_name     = ''
