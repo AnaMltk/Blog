@@ -11,9 +11,9 @@ It consists of
 
 ## Prerequisites
 
- -   PHP 7 or higher
- -   Mysql
- -   Composer
+ -  PHP 7 or higher
+ -  Mysql
+ -  Composer
 
 ## Installation
 
