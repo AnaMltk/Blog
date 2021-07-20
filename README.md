@@ -23,6 +23,7 @@ It consists of
 $ git clone https://github.com/AnaMltk/Blog.git
 $ composer update
 ```
+### Create database with blog.sql file
 
 ### Edit config.ini file
 ``` 
