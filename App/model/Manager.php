@@ -14,8 +14,9 @@ abstract class Manager
         $database = $ini['db_name'];
         $dbUser = $ini['db_user'];
         $dbPassword = $ini['db_password'];
+        $host = $ini['host'];
         try {
-            self::$db = new \PDO("mysql:host=localhost;dbname=$database;charset=utf8", $dbUser, $dbPassword);
+            self::$db = new \PDO("mysql:host=$host;dbname=$database;charset=utf8", $dbUser, $dbPassword);
         } catch (\Exception $e) {
             die('Erreur : ' . $e->getMessage());
         }
