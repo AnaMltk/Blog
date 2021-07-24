@@ -2,7 +2,6 @@
 
 namespace App\model;
 
-use App\controller\Hydrator;
 
 abstract class Model
 {

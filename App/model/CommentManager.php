@@ -2,7 +2,6 @@
 
 namespace App\model;
 
-use \App\controller\Session;
 
 class CommentManager extends Manager
 {
@@ -14,20 +13,18 @@ class CommentManager extends Manager
      */
     public function add(CommentModel $comment): string
     {
-        $session = new Session();
-        $message = 'Seulement les utilisateurs enregistrés peuvent écrire des commentaires';
-        if (!empty($session->read('user'))) {
+    
+        $comments = $this->getDb()->prepare('INSERT INTO comment (user_id, author, post_id, creation_date, content) VALUES (:user_id, :author, :post_id, :creationDate, :content)');
 
-            $comments = $this->getDb()->prepare('INSERT INTO comment (user_id, post_id, creation_date, content) VALUES (:user_id, :post_id, :creationDate, :content)');
-
-            $comments->execute([
-                ':user_id' => $comment->getUserId(),
-                ':post_id' => $comment->getPostId(),
-                ':creationDate' => date('Y-m-d H:i:s'),
-                ':content' => $comment->getContent()
-            ]);
-            $message = 'Votre commentaire sera publié après la validation par Admin';
-        }
+        $comments->execute([
+            ':user_id' => $comment->getUserId(),
+            ':author' => $comment->getAuthor(),
+            ':post_id' => $comment->getPostId(),
+            ':creationDate' => date('Y-m-d H:i:s'),
+            ':content' => $comment->getContent()
+        ]);
+        $message = 'Votre commentaire sera publié après la validation par Admin';
+       
         return $message;
     }
 
@@ -42,17 +39,20 @@ class CommentManager extends Manager
         $statement->execute(array($commentId));
     }
 
+
     /**
      * @param int $commentId
      * 
-     * @return array
+     * @return CommentModel
      */
-    public function getComment(int $commentId): array
+    public function getComment(int $commentId): CommentModel
     {
-        $statement = $this->getDb()->prepare('SELECT comment.comment_id, comment.content, comment.post_id, comment.creation_date, comment.published, comment.user_id, user.login FROM comment INNER JOIN user ON comment.user_id=user.user_id WHERE comment_id = ?');
+        $commentModel = new CommentModel();
+        $statement = $this->getDb()->prepare('SELECT * FROM comment WHERE comment_id = ?');
         $statement->execute(array($commentId));
         $comment = $statement->fetch(\PDO::FETCH_ASSOC);
-        return $comment;
+        $commentModel->hydrate($comment);
+        return $commentModel;
     }
 
     /**
@@ -62,17 +62,16 @@ class CommentManager extends Manager
      */
     public function listComments(int $postId): array
     {
-        $session = new Session();
-        $userInformation = $session->read('user');
-        $userRole = $userInformation['role'];
-
-        $statement = $this->getDb()->prepare('SELECT comment.comment_id, comment.content, comment.post_id, comment.creation_date, comment.published, comment.user_id, user.login FROM comment INNER JOIN user ON comment.user_id=user.user_id WHERE post_id = ? AND published = 1 ORDER BY creation_date DESC');
-        if (isset($userInformation) && 1 == $userRole) {
-            $statement = $this->getDb()->prepare('SELECT comment.comment_id, comment.content, comment.post_id, comment.creation_date, comment.published, comment.user_id, user.login FROM comment INNER JOIN user ON comment.user_id=user.user_id WHERE post_id = ? ORDER BY creation_date DESC');
-        }
+        $statement = $this->getDb()->prepare('SELECT * FROM comment WHERE post_id = ? AND published = 1 ORDER BY creation_date DESC');
         $statement->execute(array($postId));
         $comments = $statement->fetchAll(\PDO::FETCH_ASSOC);
-        return $comments;
+        $commentList = [];
+        foreach ($comments as $comment) {
+            $commentModel = new CommentModel();
+            $commentModel->hydrate($comment);
+            $commentList[] = $commentModel;
+        }
+        return $commentList;
     }
 
     /**
@@ -83,7 +82,13 @@ class CommentManager extends Manager
         $statement = $this->getDb()->prepare('SELECT * FROM comment WHERE published = 0 ORDER BY creation_date DESC');
         $statement->execute();
         $unpublishedComments = $statement->fetchAll(\PDO::FETCH_ASSOC);
-        return $unpublishedComments;
+        $unpublishedCommentList = [];
+        foreach($unpublishedComments as $comment){
+            $commentModel = new CommentModel();
+            $commentModel->hydrate($comment);
+            $unpublishedCommentList[] = $commentModel;
+        }
+        return $unpublishedCommentList;
     }
 
     /**

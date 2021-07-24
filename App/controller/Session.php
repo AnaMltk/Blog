@@ -19,7 +19,7 @@ class Session
     /**
      * @param mixed $key
      * 
-     * @return array|null
+     * @return mixed
      */
     public function read($key)
     {

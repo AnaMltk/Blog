@@ -9,11 +9,13 @@ class BlogpostModel extends Model
 
     protected $user_id;
     protected $post_id;
+    protected $author;
     protected $creation_date;
     protected $modification_date;
     protected $title;
     protected $content;
     protected $headline;
+
 
     /**
      * @return int
@@ -34,15 +36,23 @@ class BlogpostModel extends Model
     /**
      * @return string
      */
+    public function getAuthor(): string
+    {
+        return $this->author;
+    }
+
+    /**
+     * @return string
+     */
     public function getCreationDate(): string
     {
         return $this->creation_date;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getModificationDate(): string
+    public function getModificationDate()
     {
         return $this->modification_date;
     }
@@ -71,6 +81,7 @@ class BlogpostModel extends Model
         return $this->content;
     }
 
+
     /**
      * @param int $user_id
      * 
@@ -92,6 +103,16 @@ class BlogpostModel extends Model
     }
 
     /**
+     * @param string $author
+     * 
+     * @return void
+     */
+    public function setAuthor(string $author): void
+    {
+        $this->author = $author;
+    }
+
+    /**
      * @param string $creation_date
      * 
      * @return void
@@ -103,11 +124,11 @@ class BlogpostModel extends Model
     }
 
     /**
-     * @param string $modification_date
+     * @param string|null $modification_date
      * 
      * @return void
      */
-    public function setModificationDate(string $modification_date): void
+    public function setModificationDate($modification_date = null): void
     {
 
         $this->modification_date = $modification_date;

@@ -3,10 +3,9 @@
 namespace App\controller;
 
 use \App\model\BlogpostManager;
-use \App\model\GetPostHelper;
 use \App\model\BlogpostModel;
 use App\model\CommentManager;
-use App\model\CommentModel;
+
 
 class BlogpostController extends AppController
 {
@@ -24,10 +23,11 @@ class BlogpostController extends AppController
     public function add(): void
     {
         $session = new Session();
-        $userInformation = $session->read('user');
-        $userRole = $userInformation['role'];
+        if (!empty($session->read('user'))) {
+            $userRole = $session->read('user')->getRole();
+        }
 
-        if (1 != $userRole) {
+        if (1 != $userRole || empty($session->read('user'))) {
 
             $this->view->redirect('/homepage/home');
         }
@@ -38,13 +38,14 @@ class BlogpostController extends AppController
         if (null !== ($helper->getPost('createBlogpost'))) {
             if ($helper->getPost('token') == $session->read('token')) {
                 $blogpostModel = new BlogpostModel($helper->getPost());
-
+                $blogpostModel->setUserId($session->read('user')->getUserId());
+                $blogpostModel->setAuthor($session->read('user')->getUserName());
                 $message = $blogpost->add($blogpostModel);
             }
         }
         $session->write('token', $this->getToken());
 
-        $this->view->display('blogpost/createBlogpost.html.twig', ['message' => $message, 'blogpost' => $blogpost, 'user' => $userInformation, 'token' => $session->read('token'), 'commentToken' => $session->read('commentToken')]);
+        $this->view->display('blogpost/createBlogpost.html.twig', ['message' => $message, 'blogpost' => $blogpost, 'user' => $session->read('user') ?? '', 'token' => $session->read('token'), 'commentToken' => $session->read('commentToken')]);
     }
 
     /**
@@ -63,40 +64,27 @@ class BlogpostController extends AppController
     /**
      * @param int $post_id
      * 
-     * @return array
+     * @return BlogpostModel
      */
-    public function getPost(int $post_id): array
+    public function getPost(int $post_id)
     {
         $blogpostManager = new BlogpostManager();
         $commentManager = new CommentManager();
         $session = new Session();
-        $helper = new GetPostHelper();
 
         $comments = $commentManager->listComments($post_id);
-
         $blogpost = $blogpostManager->getPost($post_id);
         if (empty($blogpost)) {
             $this->view->redirect('/homepage/home');
         }
-
-        if (null !== ($helper->getPost('publish'))) {
-            $commentModel = new CommentModel($helper->getPost());
-            $commentManager->publish($commentModel->getCommentId());
-            $comments = $commentManager->listComments($post_id);
-        }
-
-        if (null !== ($helper->getPost('delete'))) {
-            $commentModel = new CommentModel($helper->getPost());
-            $commentManager->delete($commentModel->getCommentId());
-            $comments = $commentManager->listComments($post_id);
-        }
+        
         $message = '';
         if (null !== $session->read('message') && !empty($session->read('message'))) {
             $message = $session->read('message');
             $session->write('message', '');
         }
 
-        $this->view->display('blogpost/blogpostView.html.twig', ['blogpost' => $blogpost ?? '', 'comments' => $comments, 'user' => $session->read('user') ?? '', 'message' => $message]);
+        $this->view->display('blogpost/blogpostView.html.twig', ['blogpost' => $blogpost ?? '', 'comments' => $comments, 'user' => $session->read('user') ?? '', 'message' => $message, 'commentToken' => $session->read('commentToken')]);
         return $blogpost;
     }
 
@@ -110,10 +98,11 @@ class BlogpostController extends AppController
         $blogpostManager = new BlogpostManager();
         $helper = new GetPostHelper();
         $session = new Session();
-        $userInformation = $session->read('user');
-        $userRole = $userInformation['role'];
+        if (!empty($session->read('user'))) {
+            $userRole = $session->read('user')->getRole();
+        }
 
-        if (1 != $userRole) {
+        if (1 != $userRole || empty($session->read('user'))) {
 
             $this->view->redirect('/homepage/home');
         }
@@ -138,10 +127,11 @@ class BlogpostController extends AppController
     public function delete(): void
     {
         $session = new Session();
-        $userInformation = $session->read('user');
-        $userRole = $userInformation['role'];
+        if (!empty($session->read('user'))) {
+            $userRole = $session->read('user')->getRole();
+        }
 
-        if (1 != $userRole) {
+        if (1 != $userRole || empty($session->read('user'))) {
 
             $this->view->redirect('/homepage/home');
         }

@@ -23,15 +23,15 @@
 				<!-- Post preview-->
 				{% for blogpost in blogposts %}
 					<div class="post-preview">
-						<a href='/blogpost/getPost/{{ blogpost.post_id }}'>
+						<a href='/blogpost/getPost/{{ blogpost.postId }}'>
 							<h2 class="post-title">{{ blogpost.title }}</h2>
 							<h3 class="post-subtitle">{{ blogpost.headline }}</h3>
 						</a>
 						<p class="post-meta">
 							Écrit par
-							<a href="#!">Anastasia Molotkova</a>
+							{{ blogpost.author }}
 							le
-							{{ blogpost.creation_date }}
+							{{ blogpost.creationDate }}
 						</p>
 					</div>
 					<hr class="my-4"/>

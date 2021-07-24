@@ -8,16 +8,16 @@
 					<div class="site-heading">
 						<h1>{{ blogpost.title }}</h1>
 						<span class="meta">Écrit par
-							{{user.login}}
+							{{blogpost.author}}
 							le
-							{{blogpost.creation_date}}
+							{{blogpost.creationDate}}
 						</span>
 						<br>
-						{% if blogpost.modification_date %}
+						{% if blogpost.modificationDate %}
 							<span class="meta">Modifié par
-								{{user.login}}
+								{{blogpost.author}}
 								le
-								{{blogpost.modification_date}}
+								{{blogpost.modificationDate}}
 							</span>
 						{% endif %}
 					</div>
@@ -51,8 +51,7 @@
 								class="card-body">
 								<!-- Comment form-->
 								<form class="mb-4" method="post" action="/comment/add" name="comment-creation-form">
-									<input type="hidden" name="user_id" value="{{user.user_id}}"/>
-									<input type="hidden" name="post_id" value="{{blogpost.post_id}}"/>
+									<input type="hidden" name="post_id" value="{{blogpost.postId}}"/>
 									<input type="hidden" name="commentToken" value="{{ commentToken }}"/>
 									<textarea class="form-control" rows="3" placeholder="Votre commentaire" name="content" required></textarea>
 									<button type="submit" class="btn btn-primary text-uppercase" name="createComment" value="createComment">Écrire un commentaire</button>
@@ -69,9 +68,9 @@
 
 									<div class="ms-3">
 										{% for comment in comments %}
-											<div class="fw-bold">{{ comment.creation_date }}</div>
+											<div class="fw-bold">{{ comment.creationDate }}</div>
 											<div class="fw-bold">Écrit par
-												{{ comment.login }}</div>
+												{{ comment.author }}</div>
 											{{ comment.content }}
 
 										{% endfor %}

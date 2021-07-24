@@ -2,7 +2,6 @@
 
 namespace App\model;
 
-use App\controller\Hydrator;
 
 class UserModel extends Model
 {
@@ -12,7 +11,8 @@ class UserModel extends Model
   protected $userName;
   protected $userEmail;
   protected $userPassword;
-  
+  protected $role;
+  protected $token;
 
   /**
    * @return int
@@ -47,6 +47,32 @@ class UserModel extends Model
   }
 
   /**
+   * @return int
+   */
+  public function getRole(): int
+  {
+    return $this->role;
+  }
+
+  /**
+   * @return string|null
+   */
+  public function getToken()
+  {
+    return $this->token;
+  }
+
+  /**
+   * @param int $userId
+   * 
+   * @return void
+   */
+  public function setUserId(int $userId): void
+  {
+    $this->userId = $userId;
+  }
+
+  /**
    * @param string $userName
    * 
    * @return void
@@ -67,7 +93,7 @@ class UserModel extends Model
 
     $this->userEmail = $userEmail;
   }
-  
+
   /**
    * @param string $userPassword
    * 
@@ -76,5 +102,25 @@ class UserModel extends Model
   public function setUserPassword(string $userPassword): void
   {
     $this->userPassword = $userPassword;
+  }
+
+  /**
+   * @param int $role
+   * 
+   * @return void
+   */
+  public function setRole(int $role): void
+  {
+    $this->role = $role;
+  }
+
+  /**
+   * @param string|null $token
+   * 
+   * @return void
+   */
+  public function setToken(string $token = null): void
+  {
+    $this->token = $token;
   }
 }

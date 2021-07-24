@@ -2,9 +2,6 @@
 
 namespace App\controller;
 
-use \App\model\BlogpostManager;
-use \App\model\GetPostHelper;
-use \App\model\BlogpostModel;
 use \App\model\CommentModel;
 use \App\model\CommentManager;
 
@@ -24,20 +21,31 @@ class CommentController extends AppController
      */
     public function add(): void
     {
+
         $comment = new CommentManager();
         $helper = new GetPostHelper();
         $session = new Session();
-        $message = '';
+        $commentModel = new CommentModel();
 
+        $message = '';
+        if (empty($session->read('user'))) {
+            $message = 'Seulement les utilisateurs enregistrés peuvent écrire des commentaires';
+            $session->write('message', $message);
+            $this->view->redirect('/blogpost/getPost/' . $helper->getPost('post_id'));
+        }
         if (null !== ($helper->getPost('createComment'))) {
+    
             if ($helper->getPost('commentToken') == $session->read('commentToken')) {
                 $commentModel = new CommentModel($helper->getPost());
-
+                $commentModel->setUserId($session->read('user')->getUserId());
+                $commentModel->setAuthor($session->read('user')->getUserName());
                 $message = $comment->add($commentModel);
                 $session->write('message', $message);
             }
         }
+
         $session->write('commentToken', $this->getToken());
-        $this->view->redirect('/blogpost/getPost/' . $commentModel->getPostId());
+        $this->view->redirect('/blogpost/getPost/' . $helper->getPost('post_id'));
+    
     }
 }

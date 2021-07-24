@@ -4,8 +4,8 @@ namespace App\controller;
 
 use \App\model\BlogpostManager;
 use \App\model\CommentManager;
-use \App\model\GetPostHelper;
 use \App\model\CommentModel;
+
 
 class AdminpageController extends AppController
 {
@@ -23,10 +23,11 @@ class AdminpageController extends AppController
     public function admin(): void
     {
         $session = new Session();
-        $userInformation = $session->read('user');
-        $userRole = $userInformation['role'];
+        if (!empty($session->read('user'))) {
+            $userRole = $session->read('user')->getRole();
+        }
 
-        if (1 != $userRole) {
+        if (1 !== $userRole || empty($session->read('user'))) {
             $this->view->redirect('/homepage/home');
         }
         $blogpostManager = new BlogpostManager();

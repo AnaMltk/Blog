@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 	<head>
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
@@ -38,14 +38,14 @@
 							</li>
 						{% endif %}
 
-						{% if user.user_id is empty %}
+						{% if user.userId is empty %}
 							<li class="nav-item">
 								<a class="nav-link px-lg-3 py-3 py-lg-4" href="/user/login">Se connecter</a>
 							</li>
 						{% else %}
 							<li class="nav-item">
 								<a class="nav-link px-lg-3 py-3 py-lg-4" href="#!">Bonjour
-									{{user.login}}</a>
+									{{user.userName}}</a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link px-lg-3 py-3 py-lg-4" href="/user/logout">Se déconnecter

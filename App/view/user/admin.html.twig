@@ -34,11 +34,11 @@
 								{% for comment in comments %}
 									<tr>
 
-										<td><a href='/blogpost/getPost/{{comment.post_id}}'>{{comment.post_id}}</a></td>
+										<td><a href='/blogpost/getPost/{{comment.postId}}'>{{comment.postId}}</a></td>
 										<td>{{comment.content}}</td>
 										<td>
 											<form method="post" action="" name="publish-comment">
-												<input type="hidden" name="comment_id" value="{{comment.comment_id}}"/>
+												<input type="hidden" name="comment_id" value="{{comment.commentId}}"/>
 												<td>
 													<button type="submit" class="btn btn-primary text-uppercase" name="publish" value="publish">Publier</button>
 												</td>
@@ -69,10 +69,10 @@
 								{% for blogpost in blogposts %}
 									<tr>
 
-										<td>{{blogpost.post_id}}</td>
-										<td><a href='/blogpost/getPost/{{blogpost.post_id}}'>{{blogpost.title}}</a></td>
+										<td>{{blogpost.postId}}</td>
+										<td><a href='/blogpost/getPost/{{blogpost.postId}}'>{{blogpost.title}}</a></td>
 										<td>
-											<a href="/blogpost/modify/{{blogpost.post_id}}">Modifier/Supprimer l'article</a>
+											<a href="/blogpost/modify/{{blogpost.postId}}">Modifier/Supprimer l'article</a>
 										</td>
 										
 									</tr>
