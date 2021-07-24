@@ -20,9 +20,9 @@
 				<div class="col-md-10 col-lg-8 col-xl-7">
 
 					<h2>Modifier l'Article</h2>
-					<form method="post" action="/blogpost/modify/{{blogpost.post_id}}" name="blogpost-update-form">
-						<input type="hidden" name="user_id" value="{{blogpost.user_id}}"/>
-						<input type="hidden" name="post_id" value="{{blogpost.post_id}}"/>
+					<form method="post" action="/blogpost/modify/{{blogpost.postId}}" name="blogpost-update-form">
+						<input type="hidden" name="user_id" value="{{blogpost.userId}}"/>
+						<input type="hidden" name="post_id" value="{{blogpost.postId}}"/>
 						<input type="hidden" name="token" value="{{ token }}"/>
 						<div class="form-floating">
 
@@ -50,8 +50,8 @@
 
 			</form>
 			<br>
-			<form method="post" action="/blogpost/delete/{{blogpost.post_id}}" name="blogpost-delete">
-				<input type="hidden" name="post_id" value="{{blogpost.post_id}}"/>
+			<form method="post" action="/blogpost/delete/{{blogpost.postId}}" name="blogpost-delete">
+				<input type="hidden" name="post_id" value="{{blogpost.postId}}"/>
 				<button type="submit" class="btn btn-danger" name="deleteBlogpost" value="deleteBlogpost" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article?')">Supprimer</button>
 			</form>
 		</div>

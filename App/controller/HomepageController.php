@@ -4,7 +4,6 @@ namespace App\controller;
 
 
 use \App\service\Mailer;
-use \App\model\GetPostHelper;
 
 
 class HomepageController extends AppController
@@ -24,6 +23,7 @@ class HomepageController extends AppController
     {
         $session = new Session();
         $error = '';
+    
         $this->view->display('homepage.html.twig', ['error' => $error, 'user' => $session->read('user') ?? '']);
     }
 

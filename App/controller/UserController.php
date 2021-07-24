@@ -4,7 +4,6 @@ namespace App\controller;
 
 use \App\model\UserManager;
 use \App\service\Mailer;
-use \App\model\GetPostHelper;
 use \App\model\UserModel;
 
 
@@ -27,12 +26,31 @@ class UserController extends AppController
         $session = new Session();
         $message = '';
 
-
         if (null !== ($helper->getPost('register'))) {
 
             if ($helper->getPost('token') == $session->read('token')) {
                 $userModel = new UserModel($helper->getPost());
-                $message = $user->add($userModel);
+
+                $password = \password_hash($userModel->getUserPassword(), PASSWORD_BCRYPT);
+                $userModel->setUserPassword($password);
+                $message = [];
+                if (!filter_var($userModel->getUserEmail(), FILTER_VALIDATE_EMAIL)) {
+
+                    $message[] = 'Veuillez utiliser l\'email valide';
+                }
+                if (!preg_match("/[A-Za-z0-9]+/", $userModel->getUserName())) {
+
+                    $message[] = 'Veuillez utiliser un pseudo composé uniquement des lettres et chiffres';
+                }
+                $existantEmail = $user->getExistingEmail($userModel);
+               
+                if (!empty($existantEmail)) {
+                    $message[] = 'Cet email est déjà utilisé';
+                }
+                if (empty($message)) {
+                    $user->add($userModel);
+                    $message[] = 'Votre compte a été créé avec sucess';
+                }
             }
         }
         $session->write('token', $this->getToken());
@@ -46,7 +64,7 @@ class UserController extends AppController
      * 
      * @return array
      */
-    public function getUser(int $userId): array
+    public function getUser(int $userId)
     {
         $userManager = new UserManager();
 
@@ -71,15 +89,25 @@ class UserController extends AppController
                 $login = $userData['username'];
                 $password = $userData['password'];
 
+                $credentials = $user->getCredentials($login);
+                if (!$credentials) {
+                    $error = 'Votre email est erroné';
+                }
 
-                if ($user_id = $user->logIn($login, $password)) {
+                $checkPassword = password_verify($password, $credentials['user_password']);
+                if (!$checkPassword) {
+                    $error = 'Votre mot de passe est erroné';
+                }
+                if (password_needs_rehash($password, PASSWORD_BCRYPT)) {
+                    $hash = password_hash($password, PASSWORD_BCRYPT);
+                }
 
-                    $session->write('user', $this->getUser($user_id));
+                if (empty($error) && $user_id = $user->logIn($credentials['user_id'], $hash)) {
 
+                    $session->write('user', $user->getUser($user_id));
                     $this->view->redirect('/homepage/home');
                 }
 
-                $error = 'Votre email ou mot de passe sont erronés, veuillez réessayer';
             }
         }
 
@@ -128,7 +156,12 @@ class UserController extends AppController
         if (null !== ($helper->getPost('submit'))) {
             if ($helper->getPost('token') == $session->read('token')) {
                 $userModel = new UserModel($helper->getPost());
-                $token = $user->getTokenForPasswordReset($userModel->getUserEmail());
+                $existantEmail = $user->getExistingEmail($userModel);
+                if (!empty($existantEmail)) {
+                    $token = bin2hex(random_bytes(50));
+                    $user->getTokenForPasswordReset($token, $userModel->getUserEmail());
+                }
+              
                 if (null != $token) {
                     $url = 'blog/user/modifyPassword/' . $token;
                     $messageBody = $messageBody . ' ' . $url;
@@ -160,7 +193,8 @@ class UserController extends AppController
         $message = '';
         if (null !== ($helper->getPost('submit'))) {
             if ($helper->getPost('token') == $session->read('token')) {
-                $message = $userManager->modifyPassword($helper->getPost('password'), $token);
+                $password = \password_hash($helper->getPost('password'), PASSWORD_BCRYPT);
+                $message = $userManager->modifyPassword($password, $token);
             }
         }
         $session->write('token', $this->getToken());
