@@ -29,7 +29,12 @@ class BlogpostManager extends Manager
 
 
    
-    public function modify(BlogpostModel $blogpost)
+    /**
+     * @param BlogpostModel $blogpost
+     * 
+     * @return BlogpostModel
+     */
+    public function modify(BlogpostModel $blogpost): BlogpostModel
     {
         $statement = $this->getDb()->prepare('UPDATE blogpost SET title = :title, content = :content, headline = :headline, modification_date = :modificationDate WHERE post_id = :post_id');
         $statement->execute([
@@ -47,9 +52,9 @@ class BlogpostManager extends Manager
     /**
      * @param int $postId
      * 
-     * @return array
+     * @return BlogpostModel
      */
-    public function getPost(int $postId)
+    public function getPost(int $postId): BlogpostModel
     {
         $blogpostModel = new BlogpostModel();
         $statement = $this->getDb()->prepare('SELECT * FROM blogpost WHERE post_id = ?');

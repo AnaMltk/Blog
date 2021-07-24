@@ -2,7 +2,6 @@
 
 namespace App\model;
 
-use App\controller\Hydrator;
 
 class UserModel extends Model
 {

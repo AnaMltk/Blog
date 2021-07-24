@@ -71,7 +71,6 @@ class BlogpostController extends AppController
         $blogpostManager = new BlogpostManager();
         $commentManager = new CommentManager();
         $session = new Session();
-        $helper = new GetPostHelper();
 
         $comments = $commentManager->listComments($post_id);
         $blogpost = $blogpostManager->getPost($post_id);

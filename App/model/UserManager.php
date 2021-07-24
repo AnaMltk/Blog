@@ -56,7 +56,7 @@ class UserManager extends Manager
     {
 
         $userModel = new UserModel();
-        $statement = $this->getDb()->prepare('SELECT user_id, user_name, user_password, user_email, role, token FROM user WHERE user_id = ?');
+        $statement = $this->getDb()->prepare('SELECT user_id, user_name, user_email, role FROM user WHERE user_id = ?');
         $statement->execute(array($userId));
         $user = $statement->fetch(\PDO::FETCH_ASSOC);
 
@@ -110,7 +110,12 @@ class UserManager extends Manager
         return $userId;
     }
 
-    public function getExistingEmail($user)
+    /**
+     * @param UserModel $user
+     * 
+     * @return string
+     */
+    public function getExistingEmail(UserModel $user): string
     {
         $emailQuery = $this->getDb()->prepare('SELECT user_email FROM user WHERE user_email = ?');
         $emailQuery->execute(array($user->getUserEmail()));

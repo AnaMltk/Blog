@@ -10,7 +10,10 @@ use \App\model\UserModel;
 class UserController extends AppController
 {
 
-    public function index()
+    /**
+     * @return void
+     */
+    public function index(): void
     {
         $this->view->redirect('/homepage/home');
     }
@@ -59,12 +62,13 @@ class UserController extends AppController
     }
 
 
+    
     /**
      * @param int $userId
      * 
-     * @return array
+     * @return UserModel
      */
-    public function getUser(int $userId)
+    public function getUser(int $userId): UserModel
     {
         $userManager = new UserManager();
 
