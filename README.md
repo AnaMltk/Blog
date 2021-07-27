@@ -25,6 +25,12 @@ $ composer update
 ```
 ### Create database with blog.sql file
 
+### Set the path of your virtual host
+
+```
+${INSTALL_DIR}/www/blog/App/public
+```
+
 ### Edit config.ini file
 ``` 
 [database]
