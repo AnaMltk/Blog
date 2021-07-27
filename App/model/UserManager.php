@@ -105,7 +105,7 @@ class UserManager extends Manager
      */
     public function logIn(int $userId, string $password): int
     {
-        $user = $this->getDb()->prepare('UPDATE user SET password = :password WHERE user_id = :user_id');
+        $user = $this->getDb()->prepare('UPDATE user SET user_password = :password WHERE user_id = :user_id');
         $user->execute([':password' => $password, ':user_id' => $userId]);
         return $userId;
     }
@@ -113,13 +113,14 @@ class UserManager extends Manager
     /**
      * @param UserModel $user
      * 
-     * @return string
+     * @return array|false
      */
-    public function getExistingEmail(UserModel $user): string
+    public function getExistingEmail(UserModel $user)
     {
         $emailQuery = $this->getDb()->prepare('SELECT user_email FROM user WHERE user_email = ?');
         $emailQuery->execute(array($user->getUserEmail()));
         $existantEmail = $emailQuery->fetch(\PDO::FETCH_ASSOC);
+        
         return $existantEmail;
     }
 }

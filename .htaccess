@@ -1,13 +1,13 @@
+
 <IfModule mod_rewrite.c>
+
    RewriteEngine on
+  RewriteBase /public
   
 
-   RewriteCond %{REQUEST_URI} ^/?(css|fonts|img|js)(/.*)?$ [NC]
-   RewriteRule ^.*$ /App/public/%1%2 [L]
-
+   RewriteCond %{REQUEST_FILENAME} !-d
    RewriteCond %{REQUEST_FILENAME} !-f
-   RewriteRule (.*) App/public/index.php?action=$1 [QSA,L]
+   RewriteRule ^(.*)$ /index.php?action=$1 [QSA,L]
 </IfModule> 
 
-Header append X-FRAME-OPTIONS "SAMEORIGIN"
-Header always set X-Content-Type-Options "nosniff"
+
