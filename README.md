@@ -31,12 +31,13 @@ $ composer update
 db_name     = ''
 db_user     = ''
 db_password = ''
+host = ''
 [SMTP]
 smtp_user_name = 'nobody@nowhere.com'
 smtp_password = ''
 smtp_address = ''
 smtp_port = ''
 ```
-For **database** connection, assign the values to **db_name**, **db_user** and **db_password**.
+For **database** connection, assign the values to **db_name**, **db_user**, **db_password** and **host**.
 
 For **smtp** connection, assign the values to **smtp_user_name**, **smtp_password**, **smtp_address** and **smtp_port**.
