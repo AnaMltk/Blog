@@ -26,7 +26,7 @@ class AdminpageController extends AppController
         if (!empty($session->read('user'))) {
             $userRole = $session->read('user')->getRole();
         }
-        //var_dump($session->read('user')); exit;
+        
         if (1 !== $userRole || empty($session->read('user'))) {
             $this->view->redirect('/index.php/homepage/home');
         }
