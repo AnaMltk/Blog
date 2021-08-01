@@ -1,10 +1,17 @@
 <?php
 require __DIR__ . '/../../vendor/autoload.php';
-
+if(!defined('WWW')){
+    define('WWW', __DIR__);
+}
 session_set_cookie_params(600, '/', $_SERVER['HTTP_HOST'], false, true);
 session_start();
 date_default_timezone_set('Europe/Paris');
-$page = 'blog/public/homepage/home';
+
+$page = $_SERVER['REQUEST_URI'];
+
+if($page == '/'){
+    $page = 'blog/index.php/homepage/home';
+}
 if(!empty($_GET['action'])){
     $page = $_GET['action'];
 }

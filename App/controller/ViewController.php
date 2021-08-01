@@ -11,7 +11,7 @@ class ViewController
     public function __construct()
     {
 
-        $loader = new FilesystemLoader('../view');
+        $loader = new FilesystemLoader(WWW.'/../view');
         $this->twig = new Environment($loader);
     }
 

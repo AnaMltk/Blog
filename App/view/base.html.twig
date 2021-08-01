@@ -21,7 +21,7 @@
 		<!-- Navigation-->
 		<nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
 			<div class="container px-4 px-lg-5">
-				<a class="navbar-brand" href="/homepage/home">Page d'accueil</a>
+				<a class="navbar-brand" href="/index.php/homepage/home">Page d'accueil</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 					Menu
 					<i class="fas fa-bars"></i>
@@ -30,17 +30,17 @@
 					<ul class="navbar-nav ms-auto py-4 py-lg-0">
 
 						<li class="nav-item">
-							<a class="nav-link px-lg-3 py-3 py-lg-4" href="/blogpost/listPosts">La Liste des Articles</a>
+							<a class="nav-link px-lg-3 py-3 py-lg-4" href="/index.php/blogpost/listPosts">La Liste des Articles</a>
 						</li>
 						{% if user.role == 1 %}
 							<li class="nav-item">
-								<a class="nav-link px-lg-3 py-3 py-lg-4" href="/blogpost/add">Créer un Article</a>
+								<a class="nav-link px-lg-3 py-3 py-lg-4" href="/index.php/blogpost/add">Créer un Article</a>
 							</li>
 						{% endif %}
 
 						{% if user.userId is empty %}
 							<li class="nav-item">
-								<a class="nav-link px-lg-3 py-3 py-lg-4" href="/user/login">Se connecter</a>
+								<a class="nav-link px-lg-3 py-3 py-lg-4" href="/index.php/user/login">Se connecter</a>
 							</li>
 						{% else %}
 							<li class="nav-item">
@@ -48,7 +48,7 @@
 									{{user.userName}}</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link px-lg-3 py-3 py-lg-4" href="/user/logout">Se déconnecter
+								<a class="nav-link px-lg-3 py-3 py-lg-4" href="/index.php/user/logout">Se déconnecter
 								</a>
 							</li>
 
@@ -88,7 +88,7 @@
 						</ul>
                         {% if user.role == 1 %}
 						<div class="small text-center text-muted fst-italic">
-							<a href="/adminpage/admin">Page d'administration</a>
+							<a href="/index.php/adminpage/admin">Page d'administration</a>
 						</div>
                         {% endif %}
 					</div>

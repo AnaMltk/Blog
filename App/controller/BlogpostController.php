@@ -14,7 +14,7 @@ class BlogpostController extends AppController
      */
     public function index(): void
     {
-        $this->view->redirect('/homepage/home');
+        $this->view->redirect('/index.php/homepage/home');
     }
 
     /**
@@ -29,7 +29,7 @@ class BlogpostController extends AppController
 
         if (1 != $userRole || empty($session->read('user'))) {
 
-            $this->view->redirect('/homepage/home');
+            $this->view->redirect('/index.php/homepage/home');
         }
         $blogpost = new BlogpostManager();
         $helper = new GetPostHelper();
@@ -75,7 +75,7 @@ class BlogpostController extends AppController
         $comments = $commentManager->listComments($post_id);
         $blogpost = $blogpostManager->getPost($post_id);
         if (empty($blogpost)) {
-            $this->view->redirect('/homepage/home');
+            $this->view->redirect('/index.php/homepage/home');
         }
         
         $message = '';
@@ -104,7 +104,7 @@ class BlogpostController extends AppController
 
         if (1 != $userRole || empty($session->read('user'))) {
 
-            $this->view->redirect('/homepage/home');
+            $this->view->redirect('/index.php/homepage/home');
         }
 
         $blogpost = $blogpostManager->getPost($post_id);
@@ -133,7 +133,7 @@ class BlogpostController extends AppController
 
         if (1 != $userRole || empty($session->read('user'))) {
 
-            $this->view->redirect('/homepage/home');
+            $this->view->redirect('/index.php/homepage/home');
         }
         $blogpostManager = new BlogpostManager();
         $helper = new GetPostHelper();
@@ -141,6 +141,6 @@ class BlogpostController extends AppController
             $blogpostModel = new BlogpostModel($helper->getPost());
             $blogpostManager->delete($blogpostModel);
         }
-        $this->view->redirect('/adminpage/admin');
+        $this->view->redirect('/index.php/adminpage/admin');
     }
 }

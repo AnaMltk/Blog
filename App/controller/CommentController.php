@@ -45,7 +45,7 @@ class CommentController extends AppController
         }
 
         $session->write('commentToken', $this->getToken());
-        $this->view->redirect('/blogpost/getPost/' . $helper->getPost('post_id'));
+        $this->view->redirect('/index.php/blogpost/getPost/' . $helper->getPost('post_id'));
     
     }
 }

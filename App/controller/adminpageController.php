@@ -14,7 +14,7 @@ class AdminpageController extends AppController
      */
     public function index(): void
     {
-        $this->view->redirect('/homepage/home');
+        $this->view->redirect('/index.php/homepage/home');
     }
 
     /**
@@ -26,9 +26,9 @@ class AdminpageController extends AppController
         if (!empty($session->read('user'))) {
             $userRole = $session->read('user')->getRole();
         }
-
+        //var_dump($session->read('user')); exit;
         if (1 !== $userRole || empty($session->read('user'))) {
-            $this->view->redirect('/homepage/home');
+            $this->view->redirect('/index.php/homepage/home');
         }
         $blogpostManager = new BlogpostManager();
         $blogposts = $blogpostManager->listPosts();

@@ -50,7 +50,7 @@
 							<div
 								class="card-body">
 								<!-- Comment form-->
-								<form class="mb-4" method="post" action="/comment/add" name="comment-creation-form">
+								<form class="mb-4" method="post" action="/index.php/comment/add" name="comment-creation-form">
 									<input type="hidden" name="post_id" value="{{blogpost.postId}}"/>
 									<input type="hidden" name="commentToken" value="{{ commentToken }}"/>
 									<textarea class="form-control" rows="3" placeholder="Votre commentaire" name="content" required></textarea>

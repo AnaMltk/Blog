@@ -109,7 +109,7 @@ class UserController extends AppController
                 if (empty($error) && $user_id = $user->logIn($credentials['user_id'], $hash)) {
 
                     $session->write('user', $user->getUser($user_id));
-                    $this->view->redirect('/homepage/home');
+                    $this->view->redirect('/index.php/homepage/home');
                 }
 
             }
@@ -129,7 +129,7 @@ class UserController extends AppController
 
         $session->delete();
 
-        $this->view->redirect('/homepage/home');
+        $this->view->redirect('/index.php/homepage/home');
     }
 
     /**
@@ -167,7 +167,7 @@ class UserController extends AppController
                 }
               
                 if (null != $token) {
-                    $url = 'blog/user/modifyPassword/' . $token;
+                    $url = 'blog/index.php/user/modifyPassword/' . $token;
                     $messageBody = $messageBody . ' ' . $url;
                     $mailer->sendMail($userModel->getUserEmail(), $subject, $messageBody);
                 } else {
