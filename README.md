@@ -21,14 +21,31 @@ It consists of
 
 ```
 $ git clone https://github.com/AnaMltk/Blog.git
+$ cd Blog
 $ composer update
 ```
-### Create database with blog.sql file
-
-### Set the path of your virtual host
+### Create database
+Create database blog and load data from blog_updated.sql
+```
+$ mysql -u root -p 
+mysql> CREATE DATABASE blog
+$ mysql -u root -p blog <blog_updated.sql
 
 ```
-${INSTALL_DIR}/www/blog/App/public
+
+
+### Setup virtual host
+Create virtual host and set DocumentRoot
+```
+<VirtualHost *:80>
+	ServerName blog
+	DocumentRoot "${INSTALL_DIR}/www/blog/App/public"
+	<Directory  "${INSTALL_DIR}/www/blog/App/public/">
+		Options +Indexes +Includes +FollowSymLinks +MultiViews
+		AllowOverride All
+		Require local
+	</Directory>
+</VirtualHost>
 ```
 
 ### Edit config.ini file
