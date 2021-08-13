@@ -1,5 +1,9 @@
 # Blog
 
+To consult the website, please go to :
+http://bloganastasiamolotkova.alwaysdata.net/
+To verify the message form, please use a valid email address.
+
 ## About the project
 
 This is a professional blog presenting myself as a developper. 
