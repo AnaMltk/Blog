@@ -10,14 +10,14 @@ date_default_timezone_set('Europe/Paris');
 $page = $_SERVER['REQUEST_URI'];
 
 if($page == '/'){
-    $page = 'blog/index.php/homepage/home';
+    $page = 'blog/index.php/Homepage/home';
 }
 if(!empty($_GET['action'])){
     $page = $_GET['action'];
 }
 
 $action = explode('/', $page);
-
+$controller = ucwords(strtolower($action[2]));
 $controller = '\\App\\controller\\' . $action[2] . 'Controller';
 
 
