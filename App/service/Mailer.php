@@ -37,7 +37,7 @@ class Mailer
             // Create a message
             $message = (new \Swift_Message($subject))
                 ->setFrom([$username])
-                ->setTo([$receiver])
+                ->setTo([$username])
                 ->setBody($messageBody);
 
             // Send the message
